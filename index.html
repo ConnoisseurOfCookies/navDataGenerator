@@ -10,6 +10,9 @@
 		<title>Nav Data Sheet Generator </title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<script src="script.js" defer></script>
+
+		
 	</head>
 	<body class="is-preload">
  <!-- Pixelarity Prototype -->
@@ -54,93 +57,58 @@
 						<h2>Nav Data Sheet</h2>
 						<p>Insert grids using 2, 4, 6, 8 or 10 figure grid references. Switch between units,
 							imperial or metric, Nato mils or degrees. Add modifiers such as terrain, time of day, and
-						tactical situation to more accurately gauge the likely amount of time your trip will take.
-						Add going and remarks to more vividly describe the path taken.</p>
+							tactical situation to more accurately gauge the likely amount of time your trip will take.
+							Add going and remarks to more vividly describe the path taken.</p>
 					</header>
-					<div >
+					<form>
+					<div>
 						<section>
 							<h4>Navigational Data Sheet</h4>
-						<div class="table-wrapper">
-							<table class="alt">
-								<thead>
-									<tr>
-										<th>Serial</th>
-										<th>Grid From</th>
-										<th>Grid To</th>
-										<th>Bearing (M)</th>
-										<th>Distance (m)</th>
-										<th>Time (m)</th>
-										<th>Going</th>
-										<th>Remarks</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>1</td>
-										<td>1234<br/>5678</td>
-										<td>8764<br/>6457</td>
-										<td>3600</td>
-										<td>1500</td>
-										<td>35</td>
-										<td>Slow, unrelenting</td>
-										<td>Horribly, painful</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>1234<br/>5678</td>
-										<td>8764<br/>6457</td>
-										<td>3600</td>
-										<td>1500</td>
-										<td>35</td>
-										<td>Slow, unrelenting</td>
-										<td>Horribly, painful</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>1234<br/>5678</td>
-										<td>8764<br/>6457</td>
-										<td>3600</td>
-										<td>1500</td>
-										<td>35</td>
-										<td>Slow, unrelenting</td>
-										<td>Horribly, painful</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>1234<br/>5678</td>
-										<td>8764<br/>6457</td>
-										<td>3600</td>
-										<td>1500</td>
-										<td>35</td>
-										<td>Slow, unrelenting</td>
-										<td>Horribly, painful</td>
-									</tr>
-									<tr>
-										<td>5</td>
-										<td>1234<br/>5678</td>
-										<td>8764<br/>6457</td>
-										<td>3600</td>
-										<td>1500</td>
-										<td>35</td>
-										<td>Slow, unrelenting</td>
-										<td>Horribly, painful</td>
-									</tr>
-								</tbody>
-								<tfoot>
-									<!-- <tr>
-										<td colspan="2"></td>
-										<td>100.00</td>
-									</tr> -->
-								</tfoot>
-							</table>
-						</div>
+							<div class="table-wrapper">
+								<table class="alt">
+									<thead>
+										<tr>
+											<th>Serial</th>
+											<th>Grid From</th>
+											<th>Grid To</th>
+											<th>Bearing (M)</th>
+											<th>Distance (m)</th>
+											<th>Time (m)</th>
+											<th>Going</th>
+											<th>Remarks</th>
+										</tr>
+									</thead>
+									<tbody id="sheet">
+										<tr>
+											<td>1</td>
+											<td><input type="text" title="from" placeholder="123654" minlength="4" maxlength="10" /></td>
+											<td><input type="text" title="to" placeholder="789654" minlength="4" maxlength="10" /></td>
+											<td>1600</td>
+											<td>1600</td>
+											<td>19</td>
+											<td><input type="text" title="going" /></td>
+											<td><input type="text" title="remarks" /></td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<!-- <tr>
+													<td colspan="2"></td>
+													<td>100.00</td>
+												</tr> -->
+									</tfoot>
+								</table>
+							</div>
 						</section>
 					</div>
 					<footer class="major">
 						<ul class="actions special">
-							<li><a href="#" class="button major">More Features</a></li>
+							<li><button class="button major">More Features</button></li>
+							<li><button class="button icon solid fas fa-plus-square fa-2x">ADD</button></li>
+							<li><button type="submit" class="button primary icon solid fas fa-check-square fa-2x">COMPLETE</button>
+							</li>
 						</ul>
 					</footer>
+				</form>
 				</div>
 			</section>
 

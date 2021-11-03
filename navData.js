@@ -14,7 +14,7 @@
  * Outputs calculatable datapoints for a navDataSheet that can be derived from two grids
  * 
  */
-class navDataPoint {
+export class navDataPoint {
     constructor(gridFrom, gridTo, timeOfDay = "day", terrain = "Open", tactical = "NonTac", gma = "0", eastWest = "-1", gridZoneDesignator = "", unitOfAngle = "mils") {
         this.gridFrom = this.convertTo10Fig(gridFrom);
         this.gridTo = this.convertTo10Fig(gridTo);
@@ -171,7 +171,7 @@ class navDataPoint {
 /**
  * - Compiles and outputs a navDataSheet
  */
-class navDataSheet {
+export class navDataSheet {
     constructor() {
         this.defaults = [...arguments];
         this.serials = 1;
@@ -219,7 +219,7 @@ class navDataSheet {
 }
 
     let test = new navDataSheet();
-    test.addDataPoint("51834710", "50814802");
+    test.addDataPoint("123654", "139654");
     test.addDataPoint("50814802", "51484941");
     test.addDataPoint("51484941", "49665022");
     test.addDataPoint("49665022", "49705075");
@@ -231,7 +231,7 @@ class navDataSheet {
         TEST DATA
         From      |  To        |  Brng | Dist | T  |
     --------------|------------|-------|------|----| 
-        51834710  |  50814802  |  5540 | 1380 | 20 |
+        123654    |  789654    |  5540 | 1380 | 20 |
         50814802  |  51484941  |  0460 | 1550 | 20 |
         51484941  |  49665022  |  5220 | 2000 | 25 |
         49665022  |  49705075  |  0500 | 0550 | 10 | Wrong, bearing is 0076
