@@ -219,7 +219,7 @@ export class navDataSheet {
 }
 
     let test = new navDataSheet();
-    test.addDataPoint("123654", "139654");
+    test.addDataPoint("321456", "312465");
     test.addDataPoint("50814802", "51484941");
     test.addDataPoint("51484941", "49665022");
     test.addDataPoint("49665022", "49705075");

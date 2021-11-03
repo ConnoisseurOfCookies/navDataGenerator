@@ -217,20 +217,191 @@ class navDataSheet {
     }
 }
 
+/* DOM manipulation */
+
+// Global variables
+let serials = 1;
+let placeholders = ["321456", "312465", "5600", "1272", "15"];
+
+// The nav data sheet table in  the DOM
 let sheet = document.getElementById("sheet");
 
+// The nav data sheet Data Object
+let navData = new navDataSheet();
 
-for(let j = 0; j < 3; j++){
+// Buttons
+const add = document.getElementById("add");
+const complete = document.getElementById("complete");
+const remove = document.getElementById("delete"); 
+const printSheet = document.getElementById("print");
+
+// Global functions
+
+function addColumn(nextSerial, placeholders) {
     let column = document.createElement("tr");
-
-    for(let i = 0; i < 3; i++){
-        let row = document.createElement('td');
-        
-        row.innerText = "HO"
-        column.appendChild(row);
+    column.id = "column" + nextSerial;
+    
+    
+    let gridInput1 = document.createElement("input");
+    gridInput1.type = "text";
+    gridInput1.placeholder = "Grid";
+    gridInput1.classList.add("gridFrom");
+    gridInput1.id = "gridFromSerial" + nextSerial;
+    if(placeholders){
+        gridInput1.placeholder = placeholders[0];
     }
+
+    let gridInput2 = document.createElement("input");
+    gridInput2.type = "text";
+    gridInput2.placeholder = "Grid";
+    gridInput2.classList.add("gridTo");
+    gridInput2.id = "gridToSerial" + nextSerial;
+    if(placeholders){
+        gridInput2.placeholder = placeholders[1];
+    }
+
+    let textArea1 = document.createElement("input");
+    textArea1.type = "text";
+    textArea1.title = "going";
+    textArea1.placeholder = "Going";
+    textArea1.classList.add("gridFrom");
+    
+    
+    let textArea2 = document.createElement("input");
+    textArea2.type = "text";
+    textArea2.title = "remarks";
+    textArea2.placeholder = "Remarks";
+    
+    // Nav data sheet table elements
+    let serial = document.createElement("td");
+    let gridFrom = document.createElement("td");
+    let gridTo = document.createElement("td");
+    let bearing = document.createElement("td");
+    let distance = document.createElement("td");
+    let time = document.createElement("td");
+    let going = document.createElement("td")
+    let remarks = document.createElement("td");
+
+    if(placeholders){
+        bearing.innerHTML = placeholders[2];
+    }
+
+    if(placeholders){
+        distance.innerHTML = placeholders[3];
+    }
+
+    if(placeholders){
+        time.innerHTML = placeholders[4];
+    }
+
+    serial.innerHTML = nextSerial;
+
+    gridFrom.appendChild(gridInput1);
+
+    gridTo.appendChild(gridInput2);
+
+    going.appendChild(textArea1);
+
+    remarks.appendChild(textArea2);
+    
+    column.appendChild(serial);
+    column.appendChild(gridFrom);
+    column.appendChild(gridTo);
+    column.appendChild(bearing);
+    column.appendChild(distance);
+    column.appendChild(time);
+    column.appendChild(going);
+    column.appendChild(remarks);
+
+    
+    
     sheet.appendChild(column);
+}
+
+function finishColumn(serial){
+    let column = document.getElementById('column' + serial);
+    
+    let fromValue = column.childNodes[1].childNodes[0].value;
+    let toValue = column.childNodes[2].childNodes[0].value;
+    let goingValue = column.childNodes[6].childNodes[0].value;
+    let remarksValue = column.childNodes[7].childNodes[0].value;
+
+    let numRegex = /[^0-9]/g;
+    // Validate that both grids have been filled out correctly, it's long and disgusting I know
+    if(
+       fromValue && toValue 
+    && fromValue.length <= 10 && fromValue.length >= 4 && fromValue.length % 2 === 0
+    && toValue.length <= 10 && fromValue.length >= 4 && toValue.length % 2 === 0
+    && !fromValue.match(numRegex)
+    && !toValue.match(numRegex) 
+    ) 
+    {
+        // update datapoints
+        let dataPoint = new navDataPoint(fromValue, toValue);
+
+        column.childNodes[1].removeChild(column.childNodes[1].childNodes[0]);
+        column.childNodes[1].innerText = fromValue;
+
+        column.childNodes[2].removeChild(column.childNodes[2].childNodes[0]);
+        column.childNodes[2].innerText = toValue;
+
+
+        column.childNodes[3].innerText = dataPoint.findBearingMagnetic();
+        column.childNodes[4].innerText = dataPoint.findDistance();
+        column.childNodes[5].innerText = dataPoint.findTime();
+
+    }
+
+    column.childNodes[6].removeChild(column.childNodes[6].childNodes[0]);
+    column.childNodes[6].innerText = goingValue;
+
+    column.childNodes[7].removeChild(column.childNodes[7].childNodes[0]);
+    column.childNodes[7].innerText = remarksValue;
+}
+
+function removeColumn() {
+    sheet.removeChild(sheet.childNodes[sheet.childNodes.length - 1])
+}
+
+function printNavDataSheet() {
+    let printWindow = window.open('', '', 'height=400, widht=800');
+    printWindow.document.write('<html><head><title>Table Contents</title>');
+
+
+    printWindow.document.write('<link rel="stylesheet" href="assets/css/main.css" />');
+
+    
+    printWindow.document.write('</head>');
+
+    printWindow.document.write('<body>');
+
+    let tableToPrint = document.getElementById('fullTable').innerHTML;
+    printWindow.document.write(tableToPrint);
+    printWindow.document.write('</body>');
+
+    printWindow.document.write('</html>');
+    printWindow.print(); 
+    
 
 }
 
+// Executes once at start
+addColumn(serials, placeholders);
 
+// Event listeners
+
+add.addEventListener('click', () => {
+    serials++;
+    addColumn(serials);
+    finishColumn(serials - 1);
+})
+
+remove.addEventListener('click', () => {
+    if(serials === 1) return;
+    removeColumn();
+    serials--;
+})
+
+printSheet.addEventListener('click', () => {
+    printNavDataSheet();
+})

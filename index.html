@@ -11,8 +11,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<script src="script.js" defer></script>
-
-		
 	</head>
 	<body class="is-preload">
  <!-- Pixelarity Prototype -->
@@ -26,13 +24,50 @@
 			<nav id="menu">
 				<ul class="links">
 					<li><a href="index.html">Home</a></li>
-					<li><a href="generic.html">Generic</a></li>
 					<li><a href="elements.html">Elements</a></li>
 				</ul>
 				<ul class="actions stacked">
-					<li><a href="#" class="button primary fit">Sign Up</a></li>
-					<li><a href="#" class="button fit">Log In</a></li>
+					<li><a href="#" class="button primary fit">Apply Changes</a></li>
 				</ul>
+				<div class="col-12">
+					<label for="timeOfDay">Time of Day</label>
+					<select title="todSelect" name="timeOfDay" id="timeOfDaySelector">
+						<option value="1">Day</option>
+						<option value="1">Night</option>
+					</select>
+				</div>
+			</br>
+				<div class="col-12">
+					<label for="terrSelect">Terrain</label>
+					<select title="terrainSelect" name="terrSelect" id="terrSelect">
+						<option value="1">Open</option>
+						<option value="1">Close</option>
+						<option value="1">Extreme</option>
+					</select>
+				</div>
+				<div class="col-12">
+					<label for="tacNonTac">Tactical</label>
+					<select title="tacNonTac" name="tacNonTac" id="tacNonTac">
+						<option value="1">No</option>
+						<option value="1">Yes</option>
+					</select>
+				</div>
+			</br>
+				<div class="col-12">
+					<label for="unitOfAngle">Unit of Angle</label>
+					<select title="unitOfAngle" name="unitOfAngle" id="unitOfAngle">
+						<option value="1">Nato Mils</option>
+						<option value="1">Degrees</option>
+					</select>
+				</div>
+			</br>
+				<div class="col-12">
+					<label for="unitsOfMeasure">Units of Measure</label>
+					<select title="unitsOfMeasure" name="unitsOfMeasure" id="unitsOfMeasure">
+						<option value="1">Metric</option>
+						<option value="1">Imperial</option>
+					</select>
+				</div>
 			</nav>
 
 		<!-- Banner -->
@@ -64,31 +99,22 @@
 					<div>
 						<section>
 							<h4>Navigational Data Sheet</h4>
-							<div class="table-wrapper">
+							<div id="fullTable" class="table-wrapper">
 								<table class="alt">
 									<thead>
 										<tr>
 											<th>Serial</th>
 											<th>Grid From</th>
 											<th>Grid To</th>
-											<th>Bearing (M)</th>
-											<th>Distance (m)</th>
-											<th>Time (m)</th>
+											<th>Bearing</th>
+											<th>Distance</th>
+											<th>Time</th>
 											<th>Going</th>
 											<th>Remarks</th>
 										</tr>
 									</thead>
 									<tbody id="sheet">
-										<tr>
-											<td>1</td>
-											<td><input type="text" title="from" placeholder="123654" minlength="4" maxlength="10" /></td>
-											<td><input type="text" title="to" placeholder="789654" minlength="4" maxlength="10" /></td>
-											<td>1600</td>
-											<td>1600</td>
-											<td>19</td>
-											<td><input type="text" title="going" /></td>
-											<td><input type="text" title="remarks" /></td>
-										</tr>
+									
 									</tbody>
 									<tfoot>
 										<!-- <tr>
@@ -102,10 +128,11 @@
 					</div>
 					<footer class="major">
 						<ul class="actions special">
-							<li><button class="button major">More Features</button></li>
-							<li><button class="button icon solid fas fa-plus-square fa-2x">ADD</button></li>
-							<li><button type="submit" class="button primary icon solid fas fa-check-square fa-2x">COMPLETE</button>
-							</li>
+							<li><a id="settings" type="button" href="#menu" class="button major "><span class="fas fa-cog">Settings</span></a></li>
+							<li><button id="add" type="button" class="button icon solid fas fa-plus-square fa-2x">ADD</button></li>
+							<li><button id="delete" type="button"  type="button" class=" button  icon solid removeButton fas fa-trash fa-2x">REMOVE</button></li>
+							<li><button id="complete" type="button" class="button primary icon solid fas fa-check-square fa-2x">COMPLETE / UPDATE</button></li>
+							<li><button id="print" type="button" class="button icon solid fas fa-print fa-2x">PRINT</button></li>
 						</ul>
 					</footer>
 				</form>
@@ -142,6 +169,5 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-
 	</body>
 </html>
