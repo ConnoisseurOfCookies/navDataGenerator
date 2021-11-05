@@ -14,7 +14,7 @@
  * 
  */
 class navDataPoint {
-    constructor(gridFrom, gridTo, timeOfDay = "day", terrain = "Open", tactical = "NonTac", gma = "0", eastWest = "-1", gridZoneDesignator = "", unitOfAngle = "mils") {
+    constructor(gridFrom, gridTo, timeOfDay = "day", terrain = "Open", tactical = "NonTac", gma = "0", eastWest = "-1", gridZoneDesignator = "", unitOfAngle = "mils", unitOfMeasure = "metric") {
         this.gridFrom = this.convertTo10Fig(gridFrom);
         this.gridTo = this.convertTo10Fig(gridTo);
 
@@ -222,6 +222,16 @@ class navDataSheet {
 // Global variables
 let serials = 1;
 let placeholders = ["321456", "312465", "5600", "1272", "15"];
+let settings = {
+    timeOfDay: 'day',
+    terrain: "Open",
+    tactical: "NonTac",
+    gma: "0",
+    eastWest: "-1",
+    gridZoneDesignator: "",
+    unitOfAngle: "mils",
+    unitOfMeasure: "metric"
+}
 
 // The nav data sheet table in  the DOM
 let sheet = document.getElementById("sheet");
@@ -234,6 +244,7 @@ const add = document.getElementById("add");
 const complete = document.getElementById("complete");
 const remove = document.getElementById("delete"); 
 const printSheet = document.getElementById("print");
+const applyChanges = document.getElementById("applyChanges");
 
 // Global functions
 
@@ -246,7 +257,7 @@ function addColumn(nextSerial, placeholders) {
     gridInput1.type = "text";
     gridInput1.placeholder = "Grid";
     gridInput1.classList.add("gridFrom");
-    gridInput1.id = "gridFromSerial" + nextSerial;
+    //gridInput1.id = "gridFromSerial" + nextSerial;
     if(placeholders){
         gridInput1.placeholder = placeholders[0];
     }
@@ -255,7 +266,7 @@ function addColumn(nextSerial, placeholders) {
     gridInput2.type = "text";
     gridInput2.placeholder = "Grid";
     gridInput2.classList.add("gridTo");
-    gridInput2.id = "gridToSerial" + nextSerial;
+    //gridInput2.id = "gridToSerial" + nextSerial;
     if(placeholders){
         gridInput2.placeholder = placeholders[1];
     }
@@ -306,7 +317,9 @@ function addColumn(nextSerial, placeholders) {
     
     column.appendChild(serial);
     column.appendChild(gridFrom);
+    column.childNodes[1].id = "gridFromSerial" + nextSerial;
     column.appendChild(gridTo);
+    column.childNodes[2].id = "gridToSerial" + nextSerial;
     column.appendChild(bearing);
     column.appendChild(distance);
     column.appendChild(time);
@@ -318,6 +331,15 @@ function addColumn(nextSerial, placeholders) {
     sheet.appendChild(column);
 }
 
+function isValidGrid(grid){
+    let numRegex = /[^0-9]/g;
+
+    return  (grid // Is not null/undefined
+    && grid.length <= 10 && grid.length >= 4 && grid.length % 2 === 0 // gridLength is legal and is an even number
+    && !grid.match(numRegex)) // is a number
+
+} 
+
 function finishColumn(serial){
     let column = document.getElementById('column' + serial);
     
@@ -326,30 +348,30 @@ function finishColumn(serial){
     let goingValue = column.childNodes[6].childNodes[0].value;
     let remarksValue = column.childNodes[7].childNodes[0].value;
 
-    let numRegex = /[^0-9]/g;
-    // Validate that both grids have been filled out correctly, it's long and disgusting I know
-    if(
-       fromValue && toValue 
-    && fromValue.length <= 10 && fromValue.length >= 4 && fromValue.length % 2 === 0
-    && toValue.length <= 10 && fromValue.length >= 4 && toValue.length % 2 === 0
-    && !fromValue.match(numRegex)
-    && !toValue.match(numRegex) 
-    ) 
+    if(isValidGrid(fromValue) && isValidGrid(toValue)) 
     {
+
         // update datapoints
-        let dataPoint = new navDataPoint(fromValue, toValue);
+        let dataPoint = new navDataPoint(
+            fromValue, 
+            toValue, 
+            settings.timeOfDay, 
+            settings.terrain, 
+            settings.tactical, 
+            settings.gma,
+            settings.eastWest,
+            settings.gridZoneDesignator,
+            settings.unitOfAngle,
+            settings.unitOfMeasure
+        );
 
-        column.childNodes[1].removeChild(column.childNodes[1].childNodes[0]);
-        column.childNodes[1].innerText = fromValue;
+        completeCell("gridFromSerial" + serial, fromValue);
 
-        column.childNodes[2].removeChild(column.childNodes[2].childNodes[0]);
-        column.childNodes[2].innerText = toValue;
-
+        completeCell("gridToSerial" + serial, toValue);
 
         column.childNodes[3].innerText = dataPoint.findBearingMagnetic();
         column.childNodes[4].innerText = dataPoint.findDistance();
         column.childNodes[5].innerText = dataPoint.findTime();
-
     }
 
     column.childNodes[6].removeChild(column.childNodes[6].childNodes[0]);
@@ -361,6 +383,15 @@ function finishColumn(serial){
 
 function removeColumn() {
     sheet.removeChild(sheet.childNodes[sheet.childNodes.length - 1])
+}
+
+function completeCell(id, newValue) {
+    // Cell has child Input and it has a value
+    let cell = document.getElementById(id);
+
+    cell.removeChild(cell.childNodes[0]);
+    cell.innerText = newValue;
+
 }
 
 function printNavDataSheet() {
@@ -404,4 +435,27 @@ remove.addEventListener('click', () => {
 
 printSheet.addEventListener('click', () => {
     printNavDataSheet();
+})
+
+applyChanges.addEventListener("click", () => {
+    const timeOfDay = document.getElementById("timeOfDaySelector");
+    const terrain = document.getElementById("terrSelect");
+    const tacSituation = document.getElementById("tacNonTac");
+    const unitOfAngle = document.getElementById("unitOfAngle");
+    const unitsOfMeasure = document.getElementById("unitsOfMeasure");
+
+    settings.timeOfDay = timeOfDay.value;
+    settings.terrain = terrain.value;
+    settings.tactical = tacSituation.value;
+    settings.unitOfAngle = unitOfAngle.value;
+    settings.unitOfMeasure = unitsOfMeasure.value;
+
+    console.log(settings)
+})
+
+complete.addEventListener('click', () => {
+    sheet.childNodes.forEach(column => {
+        console.log(column)
+    }
+    );
 })

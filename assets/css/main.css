@@ -4181,3 +4181,8 @@ input, select, textarea {
 	}
 
 }
+
+#errorMessage {
+	color: #ffffff;
+	background-color: rgb(228, 85, 85);
+}

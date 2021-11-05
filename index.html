@@ -5,169 +5,188 @@
 	License: pixelarity.com/license
 -->
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<title>Nav Data Sheet Generator </title>
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<script src="script.js" defer></script>
-	</head>
-	<body class="is-preload">
- <!-- Pixelarity Prototype -->
-		<!-- Header -->
-			<header id="header" class="alt">
-				<h1><a href="https://www.ragsdevelopment.com" rel="noreferrer noopener" target="_blank">Karl Martinsson</a></h1>
-				<a href="#menu">Menu</a>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Nav Data Sheet Generator </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<script src="script.js" defer></script>
+</head>
+
+<body class="is-preload">
+	<!-- Pixelarity Prototype -->
+	<!-- Header -->
+	<header id="header" class="alt">
+		<h1><a href="https://www.ragsdevelopment.com" rel="noreferrer noopener" target="_blank">Karl Martinsson</a></h1>
+		<a href="#menu">Menu</a>
+	</header>
+
+	<!-- Menu -->
+	<nav id="menu">
+		<!-- <ul class="links">
+			<li><a href="index.html">Home</a></li>
+			<li><a href="elements.html">Elements</a></li>
+		</ul> -->
+		<form>
+			<ul class="actions stacked">
+				<li><button title="apply" type="button" id="applyChanges" class="button primary fit">Apply
+						Changes</button></li>
+			</ul>
+			<p>Applies to the next serial</p>
+			<div class="col-12">
+				<label for="timeOfDaySelector">Time of Day</label>
+				<select title="todSelect" name="timeOfDaySelector" id="timeOfDaySelector">
+					<option value="day">Day</option>
+					<option value="night">Night</option>
+				</select>
+			</div>
+			</br>
+			<div class="col-12">
+				<label for="terrSelect">Terrain</label>
+				<select title="terrainSelect" name="terrSelect" id="terrSelect">
+					<option value="Open">Open</option>
+					<option value="Close">Close</option>
+					<option value="Xtreme">Extreme</option>
+				</select>
+			</div>
+			</br>
+			<div class="col-12">
+				<label for="tacNonTac">Tactical</label>
+				<select title="tacNonTac" name="tacNonTac" id="tacNonTac">
+					<option value="NonTac">No</option>
+					<option value="Tac">Yes</option>
+				</select>
+			</div>
+			</br>
+			<div class="col-12">
+				<label for="unitOfAngle">Unit of Angle</label>
+				<select title="unitOfAngle" name="unitOfAngle" id="unitOfAngle">
+					<option value="mils">Nato Mils</option>
+					<option value="degrees">Degrees</option>
+				</select>
+			</div>
+			</br>
+			<div class="col-12">
+				<label for="unitsOfMeasure">Units of Measure</label>
+				<select title="unitsOfMeasure" name="unitsOfMeasure" id="unitsOfMeasure">
+					<option value="metric">Metric</option>
+					<option value="imperial">Imperial</option>
+				</select>
+			</div>
+		</form>
+	</nav>
+
+	<!-- Banner -->
+	<section id="banner">
+		<div class="inner">
+			<div class="content">
+				<h2>Navigation Data Sheet Generator</h2>
+				<p>Safe yourself time, quickly and easily generate a highly accurate Nav Data Sheet for your next
+					instructional or training activity</p>
+			</div>
+			<ul class="actions stacked">
+				<li><a href="#one" class="button primary major">Get Started</a></li>
+				<li><a href="#" class="button major">More Info</a></li>
+			</ul>
+		</div>
+	</section>
+
+
+	<!-- Two -->
+	<section id="one" class="wrapper style2">
+		<div class="inner">
+			<header class="major">
+				<h2>Nav Data Sheet</h2>
+				<p>Insert grids using 2, 4, 6, 8 or 10 figure grid references. Switch between units,
+					imperial or metric, Nato mils or degrees. Add modifiers such as terrain, time of day, and
+					tactical situation to more accurately gauge the likely amount of time your trip will take.
+					Add going and remarks to more vividly describe the path taken.</p>
 			</header>
+			<form>
+				<div>
+					<section>
+						<h4>Navigational Data Sheet</h4>
+						<div id="fullTable" class="table-wrapper">
+							<table class="alt">
+								<thead>
+									<tr>
+										<th>Serial</th>
+										<th>Grid From</th>
+										<th>Grid To</th>
+										<th>Bearing</th>
+										<th>Distance</th>
+										<th>Time</th>
+										<th>Going</th>
+										<th>Remarks</th>
+									</tr>
+								</thead>
+								<tbody id="sheet">
 
-		<!-- Menu -->
-			<nav id="menu">
-				<ul class="links">
-					<li><a href="index.html">Home</a></li>
-					<li><a href="elements.html">Elements</a></li>
-				</ul>
-				<ul class="actions stacked">
-					<li><a href="#" class="button primary fit">Apply Changes</a></li>
-				</ul>
-				<div class="col-12">
-					<label for="timeOfDay">Time of Day</label>
-					<select title="todSelect" name="timeOfDay" id="timeOfDaySelector">
-						<option value="1">Day</option>
-						<option value="1">Night</option>
-					</select>
-				</div>
-			</br>
-				<div class="col-12">
-					<label for="terrSelect">Terrain</label>
-					<select title="terrainSelect" name="terrSelect" id="terrSelect">
-						<option value="1">Open</option>
-						<option value="1">Close</option>
-						<option value="1">Extreme</option>
-					</select>
-				</div>
-				<div class="col-12">
-					<label for="tacNonTac">Tactical</label>
-					<select title="tacNonTac" name="tacNonTac" id="tacNonTac">
-						<option value="1">No</option>
-						<option value="1">Yes</option>
-					</select>
-				</div>
-			</br>
-				<div class="col-12">
-					<label for="unitOfAngle">Unit of Angle</label>
-					<select title="unitOfAngle" name="unitOfAngle" id="unitOfAngle">
-						<option value="1">Nato Mils</option>
-						<option value="1">Degrees</option>
-					</select>
-				</div>
-			</br>
-				<div class="col-12">
-					<label for="unitsOfMeasure">Units of Measure</label>
-					<select title="unitsOfMeasure" name="unitsOfMeasure" id="unitsOfMeasure">
-						<option value="1">Metric</option>
-						<option value="1">Imperial</option>
-					</select>
-				</div>
-			</nav>
-
-		<!-- Banner -->
-			<section id="banner">
-				<div class="inner">
-					<div class="content">
-						<h2>Navigation Data Sheet Generator</h2>
-						<p>Safe yourself time, quickly and easily generate a highly accurate Nav Data Sheet for your next instructional or training activity</p>
-					</div>
-					<ul class="actions stacked">
-						<li><a href="#one" class="button primary major">Get Started</a></li>
-						<li><a href="#" class="button major">More Info</a></li>
-					</ul>
-				</div>
-			</section>
-
-
-		<!-- Two -->
-			<section id="one" class="wrapper style2">
-				<div class="inner">
-					<header class="major">
-						<h2>Nav Data Sheet</h2>
-						<p>Insert grids using 2, 4, 6, 8 or 10 figure grid references. Switch between units,
-							imperial or metric, Nato mils or degrees. Add modifiers such as terrain, time of day, and
-							tactical situation to more accurately gauge the likely amount of time your trip will take.
-							Add going and remarks to more vividly describe the path taken.</p>
-					</header>
-					<form>
-					<div>
-						<section>
-							<h4>Navigational Data Sheet</h4>
-							<div id="fullTable" class="table-wrapper">
-								<table class="alt">
-									<thead>
-										<tr>
-											<th>Serial</th>
-											<th>Grid From</th>
-											<th>Grid To</th>
-											<th>Bearing</th>
-											<th>Distance</th>
-											<th>Time</th>
-											<th>Going</th>
-											<th>Remarks</th>
-										</tr>
-									</thead>
-									<tbody id="sheet">
-									
-									</tbody>
-									<tfoot>
-										<!-- <tr>
+								</tbody>
+								<tfoot>
+									<!-- <tr>
 													<td colspan="2"></td>
 													<td>100.00</td>
 												</tr> -->
-									</tfoot>
-								</table>
-							</div>
-						</section>
-					</div>
-					<footer class="major">
-						<ul class="actions special">
-							<li><a id="settings" type="button" href="#menu" class="button major "><span class="fas fa-cog">Settings</span></a></li>
-							<li><button id="add" type="button" class="button icon solid fas fa-plus-square fa-2x">ADD</button></li>
-							<li><button id="delete" type="button"  type="button" class=" button  icon solid removeButton fas fa-trash fa-2x">REMOVE</button></li>
-							<li><button id="complete" type="button" class="button primary icon solid fas fa-check-square fa-2x">COMPLETE / UPDATE</button></li>
-							<li><button id="print" type="button" class="button icon solid fas fa-print fa-2x">PRINT</button></li>
-						</ul>
-					</footer>
-				</form>
+								</tfoot>
+							</table>
+							<div id="errorMessage"></div>
+						</div>
+					</section>
 				</div>
-			</section>
+				<footer class="major">
+					<ul class="actions special">
+						<li><a id="settings" type="button" href="#menu" class="button major "><span
+									class="fas fa-cog">Settings</span></a></li>
+						<li><button id="add" type="button"
+								class="button icon solid fas fa-plus-square fa-2x">ADD</button></li>
+						<li><button id="delete" type="button" type="button"
+								class=" button  icon solid removeButton fas fa-trash fa-2x">REMOVE</button></li>
+						<li><button id="complete" type="button"
+								class="button primary icon solid fas fa-check-square fa-2x">COMPLETE / UPDATE</button>
+						</li>
+						<li><button id="print" type="button" class="button icon solid fas fa-print fa-2x">PRINT</button>
+						</li>
+					</ul>
+				</footer>
+			</form>
+		</div>
+	</section>
 
-		<!-- Footer -->
-			<footer id="footer">
-				<div class="inner">
-					<ul class="icons">
-						<li><a href="https://github.com/ConnoisseurOfCookies" class="icon brands fa-github" target="_blank" rel="noreferrer noopener"><span class="label">GitHub</span></a></li>
-						<li><a href="https://www.linkedin.com/in/ragsdevelopment/" class="icon brands fa-linkedin-in" target="_blank" rel="noreferrer noopener"><span class="label">LinkedIn</span></a></li>
-						<li><a href="mailto:karlm@ragsdevelopment.com" class="icon solid fa-envelope"><span class="label" target="_blank" rel="noreferrer noopener">Envelope</span></a></li>
-					</ul>
-					<ul class="contact">
-						<li>Townsville, QLD</li>
-						<li>Australia</li>
-						<li>+61 4 74783097</li>
-					</ul>
-					<ul class="links">
-						<li><a href="#">FAQ</a></li>
-						<li><a href="#">Support</a></li>
-						<li><a href="#">Terms</a></li>
-						<li><a href="#">Contact</a></li>
-					</ul>
-					<p class="copyright">&copy;All rights reserved.</p>
-				</div>
-			</footer>
+	<!-- Footer -->
+	<footer id="footer">
+		<div class="inner">
+			<ul class="icons">
+				<li><a href="https://github.com/ConnoisseurOfCookies" class="icon brands fa-github" target="_blank"
+						rel="noreferrer noopener"><span class="label">GitHub</span></a></li>
+				<li><a href="https://www.linkedin.com/in/ragsdevelopment/" class="icon brands fa-linkedin-in"
+						target="_blank" rel="noreferrer noopener"><span class="label">LinkedIn</span></a></li>
+				<li><a href="mailto:karlm@ragsdevelopment.com" class="icon solid fa-envelope"><span class="label"
+							target="_blank" rel="noreferrer noopener">Envelope</span></a></li>
+			</ul>
+			<ul class="contact">
+				<li>Townsville, QLD</li>
+				<li>Australia</li>
+				<li>+61 4 74783097</li>
+			</ul>
+			<ul class="links">
+				<li><a href="#">FAQ</a></li>
+				<li><a href="#">Support</a></li>
+				<li><a href="#">Terms</a></li>
+				<li><a href="#">Contact</a></li>
+			</ul>
+			<p class="copyright">&copy;All rights reserved.</p>
+		</div>
+	</footer>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-	</body>
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.scrollex.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+</body>
+
 </html>
