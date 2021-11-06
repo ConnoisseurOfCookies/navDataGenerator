@@ -14,7 +14,7 @@
  * 
  */
 class navDataPoint {
-    constructor(gridFrom, gridTo, timeOfDay = "day", terrain = "Open", tactical = "NonTac", gma = "0", eastWest = "-1", gridZoneDesignator = "", unitOfAngle = "mils", unitOfMeasure = "metric") {
+    constructor(gridFrom, gridTo, timeOfDay = "day", terrain = "Open", tactical = "NonTac", gma = "0", eastWest = "-1", gridZoneDesignator = "", unitOfAngle = "mils", unitOfMeasure = "meters") {
         this.gridFrom = this.convertTo10Fig(gridFrom);
         this.gridTo = this.convertTo10Fig(gridTo);
 
@@ -22,16 +22,14 @@ class navDataPoint {
         this.timeOfDay = timeOfDay;
         this.terrain = terrain;
         this.tactical = tactical;
-        this.gma = parseFloat(gma);
+        gma === "" ? this.gma = 0 : this.gma = parseFloat(gma);
+        
         this.eastWest = parseInt(eastWest);
         this.gridZoneDesignator = gridZoneDesignator;
         this.unitOfAngle = unitOfAngle;
         this.movement;
 
-        // Data to manipulate
-        this.distance;
-        this.time;
-        this.magBearing;
+        this.unitOfMeasure = unitOfMeasure;
 
         // Constants
         this.ratesOfMovement = {
@@ -52,6 +50,14 @@ class navDataPoint {
         this.units = {
             mils: 6400,
             degrees: 360
+        }
+
+        this.unitsOfMeasure = {
+            meters: 1,
+            kilometers: 0.001,
+            feet: 3.28084,
+            yards: 1.093613333,
+            miles: 0.00062137121212119323429
         }
     }
 
@@ -104,7 +110,19 @@ class navDataPoint {
         let toEasting = parseInt( to.slice(to.length / 2) );
 
         // Pythagoras theorem, rounded to integer
+
         return parseInt( Math.sqrt(Math.pow( Math.abs(fromNorthing - toNorthing), 2 ) + Math.pow( Math.abs(toEasting - fromEasting), 2 ) ));
+        
+
+    }
+
+    distanceWithUnitsOfMeasure() {
+        if(this.unitOfMeasure === "kilometers" || this.unitOfMeasure === "miles"){
+            return parseFloat( this.findDistance() * this.unitsOfMeasure[this.unitOfMeasure]).toFixed(2);
+
+        }
+        
+        return parseInt( this.findDistance() * this.unitsOfMeasure[this.unitOfMeasure]);
     }
 
     setMovement(){
@@ -134,7 +152,7 @@ class navDataPoint {
         }
 
         if(toNorthing - fromNorthing < 0){ 
-            return parseInt( 
+            return  parseInt( 
                 this.units[this.unitOfAngle] - this.findVectorAngle([toNorthing - fromNorthing, toEasting - fromEasting], [0, 1]) * (this.units[this.unitOfAngle] / (2*Math.PI)) 
                 );
         }
@@ -143,7 +161,7 @@ class navDataPoint {
 
     findBearingMagnetic(){
         let gridBearing = this.findBearingGrid();
-        return gridBearing + this.gma * this.eastWest;
+        return Math.abs((gridBearing + this.gma * this.eastWest) % this.units[this.unitOfAngle]);
     }
 
 /**
@@ -205,7 +223,7 @@ class navDataSheet {
                 dataPoint.gridFrom,
                 dataPoint.gridTo,
                 dataPoint.findBearingMagnetic(),
-                dataPoint.findDistance(),
+                dataPoint.distanceWithUnitsOfMeasure(),
                 dataPoint.findTime()
             ]
         )
@@ -230,7 +248,7 @@ let settings = {
     eastWest: "-1",
     gridZoneDesignator: "",
     unitOfAngle: "mils",
-    unitOfMeasure: "metric"
+    unitOfMeasure: "meters"
 }
 
 // The nav data sheet table in  the DOM
@@ -285,6 +303,8 @@ function addColumn(nextSerial, placeholders) {
     
     // Nav data sheet table elements
     let serial = document.createElement("td");
+    serial.style.width = "20px";
+    serial.style.textAlign = 'center';
     let gridFrom = document.createElement("td");
     let gridTo = document.createElement("td");
     let bearing = document.createElement("td");
@@ -340,18 +360,43 @@ function isValidGrid(grid){
 
 } 
 
-function finishColumn(serial){
-    let column = document.getElementById('column' + serial);
+function completeSheet() {
+    for(let i = 0; i < sheet.children.length; i++){
+        let s = i + 1;
+
+        completeColumn(s);
+    }
+
+    for(let i = 0; i < sheet.children.length; i++){
+        let s = i + 1;
+
+        if(sheet.children[i].children[1].children[0] !== undefined){
+            removeColumn(s);
+        }
+    }
+    serials = sheet.children.length;
+
+    for(let i = 0; i < sheet.children.length; i++){
+        let s = i + 1;
+
+        sheet.children[i].children[0].innerText = s;
+    }
+}
+
+function completeColumn(s) {
+    let column = sheet.children[s - 1];
+    if(!column.children[1].children[0] && !column.children[2].children[0]) return;
+    let fromValue = column.children[1].children[0].value;
+    let toValue = column.children[2].children[0].value;
+    let goingValue;
+    let remarksValue;
+    if(column.children[6].children[0]) goingValue = column.children[6].children[0].value;
     
-    let fromValue = column.childNodes[1].childNodes[0].value;
-    let toValue = column.childNodes[2].childNodes[0].value;
-    let goingValue = column.childNodes[6].childNodes[0].value;
-    let remarksValue = column.childNodes[7].childNodes[0].value;
+    if(column.children[7].children[0]) remarksValue = column.children[7].children[0].value;
 
-    if(isValidGrid(fromValue) && isValidGrid(toValue)) 
-    {
+    if(isValidGrid(fromValue) && isValidGrid(toValue)){
+        column.children[0].innerHTML = s;
 
-        // update datapoints
         let dataPoint = new navDataPoint(
             fromValue, 
             toValue, 
@@ -365,24 +410,48 @@ function finishColumn(serial){
             settings.unitOfMeasure
         );
 
-        completeCell("gridFromSerial" + serial, fromValue);
+        completeCell("gridFromSerial" + s, fromValue);
 
-        completeCell("gridToSerial" + serial, toValue);
+        completeCell("gridToSerial" + s, toValue);
 
-        column.childNodes[3].innerText = dataPoint.findBearingMagnetic();
-        column.childNodes[4].innerText = dataPoint.findDistance();
-        column.childNodes[5].innerText = dataPoint.findTime();
+        column.children[3].innerText = dataPoint.findBearingMagnetic();
+        column.children[4].innerText = dataPoint.distanceWithUnitsOfMeasure();
+        column.children[5].innerText = dataPoint.findTime();
+
+        if(column.children[6].children[0]){
+            column.children[6].removeChild(column.children[6].children[0]);
+            column.children[6].innerText = goingValue;
+        }
+
+        if(column.children[7].children[0]){
+            column.children[7].removeChild(column.children[7].children[0]);
+            column.children[7].innerText = remarksValue;
+        }
+        return;
+
     }
 
-    column.childNodes[6].removeChild(column.childNodes[6].childNodes[0]);
-    column.childNodes[6].innerText = goingValue;
 
-    column.childNodes[7].removeChild(column.childNodes[7].childNodes[0]);
-    column.childNodes[7].innerText = remarksValue;
+    if(column.children[6].children[0]) {
+        column.children[6].removeChild(column.children[6].children[0])
+        column.children[6].innerText = goingValue;
+    }
+
+    if(column.children[7].children[0]){
+        column.children[7].removeChild(column.children[7].children[0]);
+        column.children[7].innerText = remarksValue;
+    }
 }
 
-function removeColumn() {
-    sheet.removeChild(sheet.childNodes[sheet.childNodes.length - 1])
+function removeColumn(s) {
+    if(s){
+        sheet.removeChild(sheet.children[s - 1])
+        return;
+    }
+
+    sheet.removeChild(sheet.childNodes[sheet.childNodes.length - 1]);
+
+    
 }
 
 function completeCell(id, newValue) {
@@ -393,6 +462,7 @@ function completeCell(id, newValue) {
     cell.innerText = newValue;
 
 }
+
 
 function printNavDataSheet() {
     let printWindow = window.open('', '', 'height=400, widht=800');
@@ -416,26 +486,64 @@ function printNavDataSheet() {
 
 }
 
+function dropDownApplyChanges(id) {
+    let selectElement = document.getElementById(id);
+    let val = selectElement.value;
+
+    for(let i = 0; i < selectElement.children.length; i++){
+        if(val === selectElement.children[i].value) {
+            selectElement.children[i].setAttribute('selected', "true");
+            continue;
+        }
+        selectElement.children[i].removeAttribute('selected');
+        
+    }
+}
+
+function dropDownApplyChangesOptgroup(id) {
+    let selectElement = document.getElementById(id);
+    let val = selectElement.value;
+
+    for(let i = 0; i < selectElement.children.length; i++){
+
+        for(let j = 0; j < selectElement.children[i].children.length; j++){
+            if(selectElement.children[i].children[j].value === val){
+
+                selectElement.children[i].children[j].setAttribute('selected', 'true');
+                continue;
+            }
+            if(selectElement.children[i].children[j].value !== val){
+                selectElement.children[i].children[j].removeAttribute('selected');
+            }
+
+            
+        }
+    }
+}
+
 // Executes once at start
-addColumn(serials, placeholders);
+addColumn(1, placeholders);
 
 // Event listeners
 
 add.addEventListener('click', () => {
-    serials++;
-    addColumn(serials);
-    finishColumn(serials - 1);
+    addColumn(serials +1);
+    if(serials === 0){
+        serials = sheet.children.length;
+        return;
+    }
+
+    completeColumn(serials);
+    serials = sheet.children.length;
+
 })
 
 remove.addEventListener('click', () => {
-    if(serials === 1) return;
+    if(serials === 0) return;
     removeColumn();
-    serials--;
+    serials = sheet.children.length;
 })
 
-printSheet.addEventListener('click', () => {
-    printNavDataSheet();
-})
 
 applyChanges.addEventListener("click", () => {
     const timeOfDay = document.getElementById("timeOfDaySelector");
@@ -443,19 +551,30 @@ applyChanges.addEventListener("click", () => {
     const tacSituation = document.getElementById("tacNonTac");
     const unitOfAngle = document.getElementById("unitOfAngle");
     const unitsOfMeasure = document.getElementById("unitsOfMeasure");
+    const eastWest = document.getElementById('eastWest');
+    const gridMA = document.getElementById('gridMA');
 
     settings.timeOfDay = timeOfDay.value;
     settings.terrain = terrain.value;
     settings.tactical = tacSituation.value;
     settings.unitOfAngle = unitOfAngle.value;
     settings.unitOfMeasure = unitsOfMeasure.value;
+    eastWest.value === "east" ? settings.eastWest = "-1" : settings.eastWest = "1";
+    settings.gma = gridMA.value;
 
-    console.log(settings)
+
+    dropDownApplyChanges('timeOfDaySelector');
+    dropDownApplyChanges('terrSelect');
+    dropDownApplyChanges('tacNonTac');
+    dropDownApplyChanges('unitOfAngle');
+    dropDownApplyChangesOptgroup('unitsOfMeasure');
+    dropDownApplyChanges('eastWest');
+    gridMA.placeholder = gridMA.value;
+
 })
 
 complete.addEventListener('click', () => {
-    sheet.childNodes.forEach(column => {
-        console.log(column)
-    }
-    );
+    completeSheet();
+    serials = sheet.children.length;
+    
 })

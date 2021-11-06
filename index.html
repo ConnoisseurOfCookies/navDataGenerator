@@ -37,42 +37,60 @@
 			<div class="col-12">
 				<label for="timeOfDaySelector">Time of Day</label>
 				<select title="todSelect" name="timeOfDaySelector" id="timeOfDaySelector">
-					<option value="day">Day</option>
-					<option value="night">Night</option>
+					<option id="Day"  value="day">Day</option>
+					<option id="Night"  value="night">Night</option>
 				</select>
 			</div>
 			</br>
 			<div class="col-12">
 				<label for="terrSelect">Terrain</label>
 				<select title="terrainSelect" name="terrSelect" id="terrSelect">
-					<option value="Open">Open</option>
-					<option value="Close">Close</option>
-					<option value="Xtreme">Extreme</option>
+					<option id="Open" value="Open">Open</option>
+					<option id="Close" value="Close">Close</option>
+					<option id="Extreme" value="Xtreme">Extreme</option>
 				</select>
 			</div>
 			</br>
 			<div class="col-12">
 				<label for="tacNonTac">Tactical</label>
 				<select title="tacNonTac" name="tacNonTac" id="tacNonTac">
-					<option value="NonTac">No</option>
-					<option value="Tac">Yes</option>
+					<option id="No" value="NonTac">No</option>
+					<option id="Yes" value="Tac">Yes</option>
 				</select>
 			</div>
 			</br>
 			<div class="col-12">
 				<label for="unitOfAngle">Unit of Angle</label>
 				<select title="unitOfAngle" name="unitOfAngle" id="unitOfAngle">
-					<option value="mils">Nato Mils</option>
-					<option value="degrees">Degrees</option>
+					<option id="Nato Mils" value="mils">Nato Mils</option>
+					<option id="Degrees" value="degrees">Degrees</option>
 				</select>
 			</div>
 			</br>
 			<div class="col-12">
 				<label for="unitsOfMeasure">Units of Measure</label>
 				<select title="unitsOfMeasure" name="unitsOfMeasure" id="unitsOfMeasure">
-					<option value="metric">Metric</option>
-					<option value="imperial">Imperial</option>
+					<optgroup label="Metric">
+						<option id="Meters"  value="meters">Meters</option>
+						<option id="Kilometers"  value="kilometers">Kilometers</option>
+					</optgroup>
+					<optgroup label="Imperial">
+						<option id="Feet" value="feet">Feet</option>
+						<option id="Yards" value="yards">Yards</option>
+						<option id="Miles" value="miles">Miles</option>
+					</optgroup>
 				</select>
+			</div>
+			<div class="col-12">
+				<br>
+				<h3>Magnetic Variation</h3>
+				<label for="eastWest">Easterly/Westerly</label>
+				<select title="eastWest" name="eastWest" id="eastWest">
+					<option id="Easterly" value="east">Easterly</option>
+					<option id="Westerly" value="west">Westerly</option>
+				</select>
+				<h4>Grid-Magnetic Angle</h4>
+			<input id="gridMA" title="gridMagVariation" type="number" >
 			</div>
 		</form>
 	</nav>
@@ -87,7 +105,7 @@
 			</div>
 			<ul class="actions stacked">
 				<li><a href="#one" class="button primary major">Get Started</a></li>
-				<li><a href="#" class="button major">More Info</a></li>
+				<li><a href="https://www.ragsdevelopment.com/" target="_blank" rel="noreferrer noopener" class="button major">More Info</a></li>
 			</ul>
 		</div>
 	</section>
@@ -108,51 +126,54 @@
 					<section>
 						<h4>Navigational Data Sheet</h4>
 						<div id="fullTable" class="table-wrapper">
-							<table class="alt">
+							<table id="testTable" class="alt"> 
 								<thead>
 									<tr>
-										<th>Serial</th>
-										<th>Grid From</th>
-										<th>Grid To</th>
-										<th>Bearing</th>
-										<th>Distance</th>
-										<th>Time</th>
-										<th>Going</th>
-										<th>Remarks</th>
+										<th scope="col" >Serial</th>
+										<th scope="col" >Grid From</th>
+										<th scope="col" >Grid To</th>
+										<th scope="col" >Bearing</th>
+										<th scope="col" >Distance</th>
+										<th scope="col" >Time</th>
+										<th scope="col" >Going</th>
+										<th scope="col" >Remarks</th>
 									</tr>
 								</thead>
 								<tbody id="sheet">
 
 								</tbody>
-								<tfoot>
-									<!-- <tr>
-													<td colspan="2"></td>
-													<td>100.00</td>
-												</tr> -->
-								</tfoot>
 							</table>
-							<div id="errorMessage"></div>
 						</div>
 					</section>
-				</div>
-				<footer class="major">
-					<ul class="actions special">
-						<li><a id="settings" type="button" href="#menu" class="button major "><span
-									class="fas fa-cog">Settings</span></a></li>
-						<li><button id="add" type="button"
-								class="button icon solid fas fa-plus-square fa-2x">ADD</button></li>
-						<li><button id="delete" type="button" type="button"
-								class=" button  icon solid removeButton fas fa-trash fa-2x">REMOVE</button></li>
-						<li><button id="complete" type="button"
-								class="button primary icon solid fas fa-check-square fa-2x">COMPLETE / UPDATE</button>
-						</li>
-						<li><button id="print" type="button" class="button icon solid fas fa-print fa-2x">PRINT</button>
-						</li>
-					</ul>
-				</footer>
-			</form>
-		</div>
-	</section>
+					</div>
+					<footer class="major">
+						<ul class="actions special">
+							<li><a id="settings" type="button" href="#menu" class="button major "><span
+										class="fas fa-cog">Settings</span></a></li>
+							<li><button id="add" type="button" class="button icon solid fas fa-plus-square fa-2x">ADD</button></li>
+							<li><button id="delete" type="button" type="button"
+									class=" button  icon solid removeButton fas fa-trash fa-2x">REMOVE</button></li>
+							<li><button id="complete" type="button" class="button primary icon solid fas fa-check-square fa-2x">COMPLETE /
+									UPDATE</button></li>
+							<!-- <button id="pdf" type="button" class="button icon solid fas fa-file-pdf fa-2x">PDF</button> -->
+							<li class="dropDownHeader">
+								<div>
+									<button type="button" class="button icon solid fas fa-download fa-2x">DOWNLOAD</button>
+									<div class="dropDown">
+										<button id="csv" type="button" class="button icon solid fas fa-file-csv fa-2x  ">SPREADSHEET</button>
+										<button id="json" type="button" class="button icon solid fas fa-file-alt fa-2x ">JSON</button>
+										<button id="txt" type="button" class="button icon solid fas fa-file-code fa-2x ">TXT</button>
+									</div>
+								</div>
+							</li>
+							<li>
+								<button id="print" type="button" class="button icon solid fas fa-print fa-2x">PRINT</button>
+							</li>
+							</ul>
+							</footer>
+							</form>
+							</div>
+							</section>
 
 	<!-- Footer -->
 	<footer id="footer">
@@ -181,11 +202,16 @@
 	</footer>
 
 	<!-- Scripts -->
+	
 	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/tableHTMLExport.js"></script>
+	<script src="assets/js/jspdf.min.js"></script>
+	<script src="assets//js/jspdf.plugin.autotable.min.js"></script>
 	<script src="assets/js/jquery.scrollex.min.js"></script>
 	<script src="assets/js/browser.min.js"></script>
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
+	<script src="assets/js/printThis.js"></script>
 	<script src="assets/js/main.js"></script>
 </body>
 

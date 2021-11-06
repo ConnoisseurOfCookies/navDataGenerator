@@ -3,7 +3,6 @@
 	pixelarity.com | hello@pixelarity.com
 	License: pixelarity.com/license
 */
-
 (function($) {
 
 	var	$window = $(window),
@@ -54,5 +53,56 @@
 				resetForms: true,
 				side: 'right'
 			});
+
+		$('#print')
+			.click(() => {
+				$("#fullTable").printThis({
+
+				});
+
+			}
+			);
+
+		$('#csv')
+			.click(() => {
+				$('#testTable').tableHTMLExport({
+
+					//csv, txt, json, not pdf
+					type: 'csv',
+					filename: 'navDataSheet.csv',
+					consoleLog: true
+
+					
+				})
+			});
+
+			$('#json')
+			.click(() => {
+				$('#testTable').tableHTMLExport({
+
+					//csv, txt, json, not pdf
+					type: 'json',
+					filename: 'navDataSheet.json',
+					consoleLog: true
+
+					
+				})
+			});
+
+			$('#txt')
+			.click(() => {
+				$('#testTable').tableHTMLExport({
+
+					//csv, txt, json, not pdf
+					type: 'txt',
+					filename: 'navDataSheet.txt',
+					consoleLog: true
+
+					
+				})
+			});
+
+
+		
 
 })(jQuery);
