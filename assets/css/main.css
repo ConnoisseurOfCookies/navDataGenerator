@@ -4205,7 +4205,7 @@ input, select, textarea {
 	display: none;
 	position: absolute;
 	background-color: #f7f7f7;
-	
+	z-index: 2;
 
 }
 
@@ -4217,15 +4217,7 @@ input, select, textarea {
 }
 
 .dropDownHeader:hover .dropDown {
-
 	display: flex;
 
 	flex-direction: column;
-	
-
-	
-
-	
-	
-
 }
