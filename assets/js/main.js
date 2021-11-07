@@ -70,7 +70,7 @@
 					//csv, txt, json, not pdf
 					type: 'csv',
 					filename: 'navDataSheet.csv',
-					consoleLog: true
+					
 
 					
 				})
@@ -83,7 +83,7 @@
 					//csv, txt, json, not pdf
 					type: 'json',
 					filename: 'navDataSheet.json',
-					consoleLog: true
+					
 
 					
 				})
@@ -96,7 +96,7 @@
 					//csv, txt, json, not pdf
 					type: 'txt',
 					filename: 'navDataSheet.txt',
-					consoleLog: true
+					
 
 					
 				})

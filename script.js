@@ -370,12 +370,14 @@ function completeSheet() {
     for(let i = 0; i < sheet.children.length; i++){
         let s = i + 1;
 
-        if(sheet.children[i].children[1].children[0] !== undefined){
+        if(sheet.children[i].children[1].children[0]){
+            
             removeColumn(s);
+            i--;
         }
     }
     serials = sheet.children.length;
-
+    
     for(let i = 0; i < sheet.children.length; i++){
         let s = i + 1;
 
