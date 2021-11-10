@@ -4,7 +4,7 @@
 
 <h2>Navigation</h2>
 <ul>
-    <li><a href="howToUse">How to Use</a></li>
+    <li><a href="#howToUse">How to Use</a></li>
     <li><a href="#knownIssues">Known issues</a></li>
     <li><a href="#featuresToAdd">Features to Add</a></li>
     <li><a href="#toDo">To do</a></li>
