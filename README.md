@@ -16,6 +16,7 @@
     <li>Press either ADD or COMPLETE/UPDATE to complete the column/sheet, note <a href="#knownIssues"><b>Current issue with COMPLETE button</b></a></li>
     <li>Remove bottom cell with REMOVE button</li>
     <li>Download finished sheet as a Spreadsheet/JSON/TXT</li>
+    <li>Printing currently has limited device/browser compatibility, particularly when it comes to style and formatting, although I intend to make future versions with more complete toolsets</li>
 
 
 <h2 id="knownIssues">Known issues</h2>
