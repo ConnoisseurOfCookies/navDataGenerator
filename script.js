@@ -371,8 +371,6 @@ function completeSheet() {
         let s = i + 1;
 
         if(!sheet.children[i].classList.contains("completeColumn")){
-           console.log(sheet.children[i].children[1].children[0]) 
-           console.log(s);
             removeColumn(s);
             i--;
         }
