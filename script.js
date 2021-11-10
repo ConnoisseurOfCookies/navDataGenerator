@@ -388,8 +388,8 @@ function completeSheet() {
 function completeColumn(s) {
     let column = sheet.children[s - 1];
     if(!column.children[1].children[0] && !column.children[2].children[0]) return;
-    let fromValue = column.children[1].children[0].value;
-    let toValue = column.children[2].children[0].value;
+    let fromValue = column.children[1].children[0].value.replace(/\s/g, "");
+    let toValue = column.children[2].children[0].value.replace(/\s/g, "");
     let goingValue;
     let remarksValue;
     if(column.children[6].children[0]) goingValue = column.children[6].children[0].value;
