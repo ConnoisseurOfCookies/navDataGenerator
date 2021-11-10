@@ -370,8 +370,9 @@ function completeSheet() {
     for(let i = 0; i < sheet.children.length; i++){
         let s = i + 1;
 
-        if(sheet.children[i].children[1].children[0]){
-            
+        if(!sheet.children[i].classList.contains("completeColumn")){
+           console.log(sheet.children[i].children[1].children[0]) 
+           console.log(s);
             removeColumn(s);
             i--;
         }
@@ -429,6 +430,7 @@ function completeColumn(s) {
             column.children[7].removeChild(column.children[7].children[0]);
             column.children[7].innerText = remarksValue;
         }
+        sheet.children[s-1].classList.add('completeColumn');
         return;
 
     }
@@ -443,6 +445,7 @@ function completeColumn(s) {
         column.children[7].removeChild(column.children[7].children[0]);
         column.children[7].innerText = remarksValue;
     }
+
 }
 
 function removeColumn(s) {
@@ -572,6 +575,47 @@ applyChanges.addEventListener("click", () => {
     dropDownApplyChangesOptgroup('unitsOfMeasure');
     dropDownApplyChanges('eastWest');
     gridMA.placeholder = gridMA.value;
+
+    const serHeader = document.getElementById("serialHeader");
+    const froHeader = document.getElementById("fromHeader");
+    const toHeader = document.getElementById("toHeader");
+    const beaHeader = document.getElementById("bearingHeader");
+    const disHeader = document.getElementById("distanceHeader");
+    const timHeader = document.getElementById("timeHeader");
+    const goiHeader = document.getElementById("goingHeader");
+    const remHeader = document.getElementById("remarksHeader");
+
+    switch (settings.unitOfAngle) {
+        case "degrees":
+                beaHeader.innerHTML = "Bearing<br>(deg)";
+            break;
+        case "mils":
+                beaHeader.innerHTML = "Bearing<br>(mils)";
+            break;
+        default:
+            break;
+    }
+
+    switch (settings.unitOfMeasure) {
+        case "meters":
+            disHeader.innerHTML = "Distance<br>(m)";
+            break;
+        case "yards":
+            disHeader.innerHTML = "Distance<br>(yards)";
+            break;
+        case "kilometers":
+            disHeader.innerHTML = "Distance<br>(km)";
+            break;
+        case "miles":
+            disHeader.innerHTML = "Distance<br>(miles)";
+            break;
+        case "feet":
+            disHeader.innerHTML = "Distance<br>(feet)";
+            break;
+        default:
+            break;
+    }
+
 
 })
 
