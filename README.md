@@ -13,7 +13,7 @@
 
 <h2 id="howToUse">How to Use</h2>
     <li>Insert grids, 4, 6, 8 or 10 figure format </li>
-    <li>Press either ADD or COMPLETE/UPDATE to complete the column/sheet, note ~~<a href="#knownIssues"><b>Current issue with COMPLETE button</b></a>~~</li>
+    <li>Press either ADD or COMPLETE/UPDATE to complete the column/sheet, note <a href="#knownIssues"><strike>Current issue with COMPLETE button</strike></a></li>
     <li>Remove bottom cell with REMOVE button</li>
     <li>Download finished sheet as a Spreadsheet/JSON/TXT</li>
     <li>Printing currently has limited device/browser compatibility, particularly when it comes to style and formatting, although I intend to make future versions with more complete toolsets</li>
@@ -24,7 +24,7 @@
 <h3>UI</h3>
 
 <ul>
-    <li>~~Complete/update button sometimes deletes last element, probable issue with sheet indexing~~ Hopefully fixed</li>
+    <li><p><strike>Complete/update button sometimes deletes last element, probable issue with sheet indexing</strike></p> <b>Propably fixed</b></li>
 </ul>
 
 <h2 id="featuresToAdd">Features/to add</h2>
