@@ -4187,19 +4187,51 @@ input, select, textarea {
 	background-color: rgb(228, 85, 85);
 }
 
+.addFeatureArea {
+	display: flex;
+	flex-direction: row;
 
-@media print {
-	body {
-		-webkit-print-color-adjust: exact;
-		margin: 1cm;
-	}
-
+	height: 3.8em;
 	
-
-	@page {
-		margin: 0;
-	}
+	list-style: none;
 }
+
+.addFeatureArea li {
+	height: 100%;
+}
+
+#add {
+	height: 100%;
+	font-size: 1em;
+}
+
+
+#fromInput, #toInput {
+	display: block;
+	width: 15ch;
+	font-size: 1.4em;
+}
+
+#serialSelector {
+	display: block;
+	width: 10ch;
+	font-size: 1.4em;
+	text-align: center;
+}
+
+#serialSelector:hover {
+	cursor: pointer;
+}
+
+.longTextInput {
+	list-style: none;
+}
+
+#goingInput, #remarksInput {
+	margin: 0.75em 0;
+}
+
+
 
 .dropDown {
 	display: none;
@@ -4220,4 +4252,17 @@ input, select, textarea {
 	display: flex;
 
 	flex-direction: column;
+}
+
+@media print {
+	body {
+		-webkit-print-color-adjust: exact;
+		margin: 1cm;
+	}
+
+	
+
+	@page {
+		margin: 0;
+	}
 }

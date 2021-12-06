@@ -235,11 +235,19 @@ class navDataSheet {
     }
 }
 
+// New String methods
+String.prototype.splitInHalf = function ()  {
+    return this.slice(0, this.length/2) + " " + this.slice(this.length/2);
+}
+
+String.prototype.removeAllWhitespace = function () {
+    return this.replace(/\s/g, "");
+}
+
 /* DOM manipulation */
 
 // Global variables
-let serials = 1;
-let placeholders = ["321456", "312465", "5600", "1272", "15"];
+let placeholders = ["321 456", "312 465", "5600", "1272", "15"];
 let settings = {
     timeOfDay: 'day',
     terrain: "Open",
@@ -264,143 +272,209 @@ const remove = document.getElementById("delete");
 const printSheet = document.getElementById("print");
 const applyChanges = document.getElementById("applyChanges");
 
+
+// Input textareas
+const serialSelector = document.getElementById("serialSelector");
+const fromInput = document.getElementById("fromInput");
+const toInput = document.getElementById("toInput");
+const goingInput = document.getElementById("goingInput");
+const remarksInput = document.getElementById("remarksInput");
+
 // Global functions
 
-function addColumn(nextSerial, placeholders) {
+function addColumn(placeholders) {
     let column = document.createElement("tr");
-    column.id = "column" + nextSerial;
+    column.addEventListener('mouseover', () => {
+        column.style.cursor = "pointer";
+    })
+    
+     
+    let serial = serialSelector.value;
+    console.log(serial);
+    let from = fromInput.value;
+    let to = toInput.value;
+    let going = goingInput.value; 
+    let remarks = remarksInput.value;
     
     
-    let gridInput1 = document.createElement("input");
-    gridInput1.type = "text";
-    gridInput1.placeholder = "Grid";
-    gridInput1.classList.add("gridFrom");
-    //gridInput1.id = "gridFromSerial" + nextSerial;
+   
+    
+    // Nav data sheet table elements plus some styling
+    let serialCell = document.createElement("td");
+    serialCell.style.textAlign = "center";
+    serialCell.style.width = "2ch"
+
+    let gridFromCell = document.createElement("td");
+    gridFromCell.style.width = "12ch";
+    gridFromCell.style.textAlign = "center";
+    let gridToCell = document.createElement("td");
+    gridToCell.style.width = "12ch";
+    gridToCell.style.textAlign = "center";
+
+    let bearingCell = document.createElement("td");
+    let distanceCell = document.createElement("td");
+    let timeCell = document.createElement("td");
+    let goingCell = document.createElement("td");
+    let remarksCell = document.createElement("td");
+
+    // Add placeholders at start
     if(placeholders){
-        gridInput1.placeholder = placeholders[0];
+        serialCell.innerText = "1";
+        gridFromCell.innerText = placeholders[0];
+        gridToCell.innerText = placeholders[1];
+        bearingCell.innerText = placeholders[2];
+        distanceCell.innerText = placeholders[3];
+        timeCell.innerText = placeholders[4];
+        goingCell.innerText = "Long, Hard and Gutwrenching";
+        remarksCell.innerText = "View is quite nice, if nothing else";
+        
+        column.appendChild(serialCell);
+        column.appendChild(gridFromCell);
+        column.appendChild(gridToCell);
+        column.appendChild(bearingCell);
+        column.appendChild(distanceCell);
+        column.appendChild(timeCell);
+        column.appendChild(goingCell);
+        column.appendChild(remarksCell);
+
+        column.addEventListener('click', (e) => {
+            serialSelector.value = serial;    
+            fromInput.value = column.children[1].innerText;
+            toInput.value = column.children[2].innerText;
+            goingInput.value = column.children[6].innerText;
+            remarksInput.value = column.children[7].innerText;
+        })
+
+        sheet.appendChild(column);
+        return;
+    }
+    
+    /* Deal with Serial */
+
+    // This serial is the first serial
+    
+    if(serialSelector.length === 1){
+        
+        let serialOption = document.createElement("option");
+        serialOption.value = "2";
+        serialOption.innerText = "2";
+        serialSelector.appendChild(serialOption);
+
+
+        serialCell.innerText = "2";
+       editColumn(
+           {cell: serialCell, value: serial}, 
+           {cell: gridFromCell, value: from}, 
+           {cell: gridToCell, value: to},
+           {cell: bearingCell},
+           {cell: distanceCell},
+           {cell: timeCell},
+           {cell: goingCell, value: going},
+           {cell: remarksCell, value: remarks},
+           sheet.children[parseInt(serial) - 1],
+           true
+       )
+
+        
+        sheet.children[serial-1] = column;
+
+        serialSelector.value = (parseInt(serial) + 1).toString();
+        fromInput.value = to;
+        toInput.value = "";
+        toInput.placeholder = "Grid To";
+        goingInput.value = "";
+        goingInput.placeholder = "Going";
+        remarksInput.value = "";
+        remarksInput.placeholder = "Remarks";
+        return;
     }
 
-    let gridInput2 = document.createElement("input");
-    gridInput2.type = "text";
-    gridInput2.placeholder = "Grid";
-    gridInput2.classList.add("gridTo");
-    //gridInput2.id = "gridToSerial" + nextSerial;
-    if(placeholders){
-        gridInput2.placeholder = placeholders[1];
+    // Not first serial, but is an edit
+    if(parseInt(serial) <= sheet.childNodes.length-1){
+
+       editColumn(
+           {cell: serialCell, value: serial}, 
+           {cell: gridFromCell, value: from}, 
+           {cell: gridToCell, value: to},
+           {cell: bearingCell},
+           {cell: distanceCell},
+           {cell: timeCell},
+           {cell: goingCell, value: going},
+           {cell: remarksCell, value: remarks},
+           sheet.children[parseInt(serial) - 1],
+           true
+       )
+
+
+    
+        return;
     }
 
-    let textArea1 = document.createElement("input");
-    textArea1.type = "text";
-    textArea1.title = "going";
-    textArea1.placeholder = "Going";
-    textArea1.classList.add("gridFrom");
-    
-    
-    let textArea2 = document.createElement("input");
-    textArea2.type = "text";
-    textArea2.title = "remarks";
-    textArea2.placeholder = "Remarks";
-    
-    // Nav data sheet table elements
-    let serial = document.createElement("td");
-    serial.style.width = "20px";
-    serial.style.textAlign = 'center';
-    let gridFrom = document.createElement("td");
-    let gridTo = document.createElement("td");
-    let bearing = document.createElement("td");
-    let distance = document.createElement("td");
-    let time = document.createElement("td");
-    let going = document.createElement("td")
-    let remarks = document.createElement("td");
+    // This serial is not the first serial and is not an edit
+    if(parseInt(serial) > sheet.children.length){
 
-    if(placeholders){
-        bearing.innerHTML = placeholders[2];
+        let serialOption = document.createElement("option");
+        serialOption.value = (parseInt(serial) + 1).toString();
+        serialOption.innerText = (parseInt(serial) + 1).toString();
+        serialSelector.appendChild(serialOption);
+
+        serialCell.innerText = serial;
+        
+        editColumn(
+            {cell: serialCell, value: serial}, 
+            {cell: gridFromCell, value: from}, 
+            {cell: gridToCell, value: to},
+            {cell: bearingCell},
+            {cell: distanceCell},
+            {cell: timeCell},
+            {cell: goingCell, value: going},
+            {cell: remarksCell, value: remarks},
+            column,
+            
+        )
+
+        serialSelector.value = (parseInt(serial) + 1).toString();
+        fromInput.value = to;
+        toInput.value = "";
+        toInput.placeholder = "Grid To";
+        goingInput.value = "";
+        goingInput.placeholder = "Going";
+        remarksInput.value = "";
+        remarksInput.placeholder = "Remarks";
+
     }
 
-    if(placeholders){
-        distance.innerHTML = placeholders[3];
-    }
-
-    if(placeholders){
-        time.innerHTML = placeholders[4];
-    }
-
-    serial.innerHTML = nextSerial;
-
-    gridFrom.appendChild(gridInput1);
-
-    gridTo.appendChild(gridInput2);
-
-    going.appendChild(textArea1);
-
-    remarks.appendChild(textArea2);
-    
-    column.appendChild(serial);
-    column.appendChild(gridFrom);
-    column.childNodes[1].id = "gridFromSerial" + nextSerial;
-    column.appendChild(gridTo);
-    column.childNodes[2].id = "gridToSerial" + nextSerial;
-    column.appendChild(bearing);
-    column.appendChild(distance);
-    column.appendChild(time);
-    column.appendChild(going);
-    column.appendChild(remarks);
-
     
     
+    column.addEventListener('click', (e) => {
+        serialSelector.value = serial;    
+        fromInput.value = column.children[1].innerText;
+        toInput.value = column.children[2].innerText;
+        goingInput.value = column.children[6].innerText;
+        remarksInput.value = column.children[7].innerText;
+    })
+    
+
     sheet.appendChild(column);
 }
 
-function isValidGrid(grid){
-    let numRegex = /[^0-9]/g;
+function editColumn(serial, from, to, bearing, distance, time, going, remarks, column, isEdit = false){
 
-    return  (grid // Is not null/undefined
-    && grid.length <= 10 && grid.length >= 4 && grid.length % 2 === 0 // gridLength is legal and is an even number
-    && !grid.match(numRegex)) // is a number
+    serial.cell.innerText = serial.value;
 
-} 
+    from.value = from.value.removeAllWhitespace();
+    to.value = to.value.removeAllWhitespace();
 
-function completeSheet() {
-    for(let i = 0; i < sheet.children.length; i++){
-        let s = i + 1;
+    from.cell.innerText = from.value.splitInHalf();
+    to.cell.innerText = to.value.splitInHalf();
 
-        completeColumn(s);
-    }
+    fromVal = from.value;
+    toVal = to.value;
 
-    for(let i = 0; i < sheet.children.length; i++){
-        let s = i + 1;
-
-        if(!sheet.children[i].classList.contains("completeColumn")){
-            removeColumn(s);
-            i--;
-        }
-    }
-    serials = sheet.children.length;
-    
-    for(let i = 0; i < sheet.children.length; i++){
-        let s = i + 1;
-
-        sheet.children[i].children[0].innerText = s;
-    }
-}
-
-function completeColumn(s) {
-    let column = sheet.children[s - 1];
-    if(!column.children[1].children[0] && !column.children[2].children[0]) return;
-    let fromValue = column.children[1].children[0].value.replace(/\s/g, "");
-    let toValue = column.children[2].children[0].value.replace(/\s/g, "");
-    let goingValue;
-    let remarksValue;
-    if(column.children[6].children[0]) goingValue = column.children[6].children[0].value;
-    
-    if(column.children[7].children[0]) remarksValue = column.children[7].children[0].value;
-
-    if(isValidGrid(fromValue) && isValidGrid(toValue)){
-        column.children[0].innerHTML = s;
-
+    if(isValidGrid(fromVal) && isValidGrid(toVal)){
         let dataPoint = new navDataPoint(
-            fromValue, 
-            toValue, 
+            fromVal, 
+            toVal, 
             settings.timeOfDay, 
             settings.terrain, 
             settings.tactical, 
@@ -411,44 +485,56 @@ function completeColumn(s) {
             settings.unitOfMeasure
         );
 
-        completeCell("gridFromSerial" + s, fromValue);
+        bearing.value = dataPoint.findBearingGrid();
+        bearing.cell.innerText = bearing.value;
 
-        completeCell("gridToSerial" + s, toValue);
+        distance.value = dataPoint.findDistance();
+        distance.cell.innerText = distance.value;
 
-        column.children[3].innerText = dataPoint.findBearingMagnetic();
-        column.children[4].innerText = dataPoint.distanceWithUnitsOfMeasure();
-        column.children[5].innerText = dataPoint.findTime();
+        time.value = dataPoint.findTime();
+        time.cell.innerText = time.value;
 
-        if(column.children[6].children[0]){
-            column.children[6].removeChild(column.children[6].children[0]);
-            column.children[6].innerText = goingValue;
-        }
+        going.cell.innerText = going.value;
+        remarks.cell.innerText = remarks.value;
+    }
 
-        if(column.children[7].children[0]){
-            column.children[7].removeChild(column.children[7].children[0]);
-            column.children[7].innerText = remarksValue;
-        }
-        sheet.children[s-1].classList.add('completeColumn');
-        return;
-
+    if(isEdit){
+        column.children[1].innerText = from.value.splitInHalf();
+        column.children[2].innerText = to.value.splitInHalf();
+        column.children[3].innerText = bearing.value;
+        column.children[4].innerText = distance.value;
+        column.children[5].innerText = time.value;
+        column.children[6].innerText = going.value;
+        column.children[7].innerText = remarks.value;
+        return
     }
 
 
-    if(column.children[6].children[0]) {
-        column.children[6].removeChild(column.children[6].children[0])
-        column.children[6].innerText = goingValue;
-    }
 
-    if(column.children[7].children[0]){
-        column.children[7].removeChild(column.children[7].children[0]);
-        column.children[7].innerText = remarksValue;
-    }
+    
+    column.appendChild(serial.cell);
+    column.appendChild(from.cell);
+    column.appendChild(to.cell);
+    column.appendChild(bearing.cell);
+    column.appendChild(distance.cell);
+    column.appendChild(time.cell);
+    column.appendChild(going.cell);
+    column.appendChild(remarks.cell);
 
 }
 
-function removeColumn(s) {
-    if(s){
-        sheet.removeChild(sheet.children[s - 1])
+
+function isValidGrid(grid){
+    let numRegex = /[^0-9]/g;
+
+    return  (grid // Is not null/undefined
+    && grid.length <= 10 && grid.length >= 4 && grid.length % 2 === 0 // gridLength is legal and is an even number
+    && !grid.match(numRegex)) // is a number
+
+} 
+
+function removeColumn() {
+    if(sheet.children.length === 1){
         return;
     }
 
@@ -457,14 +543,6 @@ function removeColumn(s) {
     
 }
 
-function completeCell(id, newValue) {
-    // Cell has child Input and it has a value
-    let cell = document.getElementById(id);
-
-    cell.removeChild(cell.childNodes[0]);
-    cell.innerText = newValue;
-
-}
 
 
 function printNavDataSheet() {
@@ -525,24 +603,16 @@ function dropDownApplyChangesOptgroup(id) {
 }
 
 // Executes once at start
-addColumn(1, placeholders);
+addColumn(placeholders);
 
 // Event listeners
 
 add.addEventListener('click', () => {
-    addColumn(serials +1);
-    if(serials === 0){
-        serials = sheet.children.length;
-        return;
-    }
-
-    completeColumn(serials);
-    serials = sheet.children.length;
-
+    addColumn();
 })
 
 remove.addEventListener('click', () => {
-    if(serials === 0) return;
+    if(sheet.children.length === 1) return;
     removeColumn();
     serials = sheet.children.length;
 })
@@ -618,7 +688,7 @@ applyChanges.addEventListener("click", () => {
 })
 
 complete.addEventListener('click', () => {
-    completeSheet();
+
     serials = sheet.children.length;
     
 })
