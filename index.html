@@ -33,7 +33,7 @@
 				<li><button title="apply" type="button" id="applyChanges" class="button primary fit">Apply
 						Changes</button></li>
 			</ul>
-			<p>Applies to the next serial</p>
+			<h3>Applies to the serial that is about to be set</h3>
 			<div class="col-12">
 				<label for="timeOfDaySelector">Time of Day</label>
 				<select title="todSelect" name="timeOfDaySelector" id="timeOfDaySelector">
@@ -59,6 +59,8 @@
 				</select>
 			</div>
 			</br>
+			<h3>Applies to all serials</h3>
+
 			<div class="col-12">
 				<label for="unitOfAngle">Unit of Angle</label>
 				<select title="unitOfAngle" name="unitOfAngle" id="unitOfAngle">
@@ -79,6 +81,13 @@
 						<option id="Yards" value="yards">Yards</option>
 						<option id="Miles" value="miles">Miles</option>
 					</optgroup>
+				</select>
+			</div>
+			<div class="col-12">
+				<label for="timeFormat">Time Format</label>
+				<select title="timeFormat" name="timeFormat" id="timeFormat">
+					<option value=":mm">:mm</option>
+					<option value="h:mm">h:mm</option>
 				</select>
 			</div>
 			<div class="col-12">
@@ -119,18 +128,20 @@
 				<p>Insert grids using 4, 6, 8 or 10 figure grid references. Switch between units,
 					imperial or metric, Nato mils or degrees. Add modifiers such as terrain, time of day, and
 					tactical situation to more accurately gauge the likely amount of time your trip will take.
-					Add going and remarks to more vividly describe the path taken.</p>
+					Add going and remarks to more vividly describe the path taken. Grid-Magnetic Variation can be added in Settings</p>
 			</header>
 			<form>
 				<div>
 					<section>
-						
+							<div class="warningWrapper">
 
+								<p id="warning"></p>
+							</div>
 							<ul class="addFeatureArea">
-								<li><button id="add" type="button" class="button icon solid fas fa-plus-square fa-2x">SET</button></li>
+								<li><button id="add" type="button" class="button primary icon solid fas fa-plus-square fa-2x">ADD/EDIT</button></li>
 								<li>
 									<div class="col-12">
-										<label  for="serialSelector" style="display: block; position: absolute;">Serial</label>
+										<label class="serialLabel"  for="serialSelector">Serial</label>
 										<select title="serialSelect" name="serialSelector" id="serialSelector">
 											<option value="1">1</option>
 										</select>
@@ -142,12 +153,11 @@
 						
 						<ul class="longTextInput">
 							<li><textarea placeholder="Going: Long, Hard and Gutwrenching" id="goingInput" title="going"></textarea></li>
-							<li><textarea placeholder="Remarks: View is quite nice, if nothing else" id="remarksInput" title="remarks"></textarea></li>
+							<li><textarea placeholder="Remarks: View is quite nice, totally worth it" id="remarksInput" title="remarks"></textarea></li>
 						</ul>
-						
-						<h4>Navigational Data Sheet</h4>
-						<div id="fullTable" class="table-wrapper">
-							<table id="testTable" class="alt"> 
+						<div  class="table-wrapper">
+							<table id="fullTable" class="alt"> 
+								<caption id="tableTitle"><h4 id="printTitle">Navigation Data Sheet</h4></caption> 
 								<thead>
 									<tr>
 										<th id="serialHeader" scope="col" >Serial</th>
@@ -173,8 +183,7 @@
 										class="fas fa-cog">Settings</span></a></li>
 							<li><button id="delete" type="button" type="button"
 									class=" button  icon solid removeButton fas fa-trash fa-2x">REMOVE</button></li>
-							<li><button id="complete" type="button" class="button primary icon solid fas fa-check-square fa-2x">COMPLETE /
-									UPDATE</button></li>
+							<li><button id="editTitle" type="button" class="button icon solid fas fa-user-edit fa-2x">EDIT TITLE</button></li>
 							<!-- <button id="pdf" type="button" class="button icon solid fas fa-file-pdf fa-2x">PDF</button> -->
 							<li class="dropDownHeader">
 								<div>

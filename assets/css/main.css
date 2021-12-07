@@ -2199,7 +2199,7 @@ input, select, textarea {
 		}
 
 	input[type="checkbox"]:checked + label:before,
-	input[type="radio"]:checked + label:before {
+	input[type="radio"]:checked + label:before { 
 		background-color: #4dbea0;
 		border-color: #4dbea0;
 		color: #ffffff;
@@ -4264,6 +4264,26 @@ input, select, textarea {
 	display: flex;
 
 	flex-direction: column;
+}
+
+#warning {
+	display: block;
+	color: #f7f7f7;
+	background-color:#f06767;
+	width: 100%;
+	padding-left: 1em; 
+	margin-left: 2em;
+	border-radius: 4px;
+
+}
+
+.warningWrapper {
+	height: 3em;
+}
+
+.serialLabel {
+	display: block; 
+	position: absolute;
 }
 
 @media print {
