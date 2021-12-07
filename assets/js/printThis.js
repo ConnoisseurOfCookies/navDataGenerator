@@ -313,7 +313,7 @@
     $.fn.printThis.defaults = {
         debug: false,               // show the iframe for debugging
         importCSS: true,            // import parent page css
-        importStyle: false,         // import style tags
+        importStyle: true,         // import style tags
         printContainer: true,       // print outer container/$.selector
         loadCSS: "",                // path to additional css file - use an array [] for multiple
         pageTitle: "",              // add title to print page

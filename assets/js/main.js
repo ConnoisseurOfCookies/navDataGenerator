@@ -57,7 +57,7 @@
 		$('#print')
 			.click(() => {
 				$("#fullTable").printThis({
-
+					
 				});
 
 			}
@@ -65,7 +65,7 @@
 
 		$('#csv')
 			.click(() => {
-				$('#testTable').tableHTMLExport({
+				$('#fullTable').tableHTMLExport({
 
 					//csv, txt, json, not pdf
 					type: 'csv',
@@ -78,7 +78,7 @@
 
 			$('#json')
 			.click(() => {
-				$('#testTable').tableHTMLExport({
+				$('#fullTable').tableHTMLExport({
 
 					//csv, txt, json, not pdf
 					type: 'json',
@@ -91,7 +91,7 @@
 
 			$('#txt')
 			.click(() => {
-				$('#testTable').tableHTMLExport({
+				$('#fullTable').tableHTMLExport({
 
 					//csv, txt, json, not pdf
 					type: 'txt',

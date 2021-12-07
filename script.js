@@ -14,7 +14,7 @@
  * 
  */
 class navDataPoint {
-    constructor(gridFrom, gridTo, timeOfDay = "day", terrain = "Open", tactical = "NonTac", gma = "0", eastWest = "-1", gridZoneDesignator = "", unitOfAngle = "mils", unitOfMeasure = "meters") {
+    constructor(gridFrom, gridTo, timeOfDay = "day", terrain = "Open", tactical = "NonTac", gma = "0", eastWest = "-1", gridZoneDesignator = "", unitOfAngle = "mils", unitOfMeasure = "meters", timeFormat = ":mm") {
         this.gridFrom = this.convertTo10Fig(gridFrom);
         this.gridTo = this.convertTo10Fig(gridTo);
 
@@ -31,6 +31,7 @@ class navDataPoint {
 
         this.unitOfMeasure = unitOfMeasure;
 
+        this.timeFormat = timeFormat;
         // Constants
         this.ratesOfMovement = {
             dayOpenNonTac: 5000,
@@ -135,6 +136,49 @@ class navDataPoint {
         return parseInt( (distance / this.movement) * 60);
     }
 
+    convertMMtoHM(min){
+        let m = parseInt(min);
+
+        let zero = "";
+        if(m % 60 < 10) zero = "0";
+        let hourTime = (Math.floor(m / 60)).toString() // 1
+         + ":" + zero + // 3
+         (m % 60).toString(); // 2
+
+         return hourTime;
+
+    }
+
+    convertHMtoMM(h){
+        let minutes = parseInt(h[h.length-2] + h[h.length-1]);
+        console.log(minutes + " minutes")
+        let hours = '';
+        for(let i = 0; i <= h.length-4; i++){
+            hours += h[i];
+        }
+        
+        hours = parseInt(hours);
+        return ((parseInt(hours) * 60 + minutes).toString()).toString();
+    }
+
+    getFormattedTime(){
+        // Hour time, 1: Get number of hours 2: get number of minutes 3: are there more than 10 minutes
+        let zero = "";
+        if(parseInt(this.findTime()) % 60 < 10) zero = "0";
+        let hourTime = (Math.floor(parseFloat(this.findTime()) / 60)).toString() // 1
+         + ":" + zero + // 3
+         (parseInt(this.findTime()) % 60).toString(); // 2
+
+        switch (this.timeFormat) {
+            case ":mm":
+                return this.findTime();
+            case "h:mm":
+                return hourTime;
+            default:
+                break;
+        }
+    }
+
     findBearingGrid(){
         let from = this.gridFrom;
         let to = this.gridTo;
@@ -224,7 +268,7 @@ class navDataSheet {
                 dataPoint.gridTo,
                 dataPoint.findBearingMagnetic(),
                 dataPoint.distanceWithUnitsOfMeasure(),
-                dataPoint.findTime()
+                dataPoint.getFormattedTime()
             ]
         )
         this.serials += 1;
@@ -256,8 +300,10 @@ let settings = {
     eastWest: "-1",
     gridZoneDesignator: "",
     unitOfAngle: "mils",
-    unitOfMeasure: "meters"
+    unitOfMeasure: "meters",
+    timeFormat: ":mm"
 }
+let title = "";
 
 // The nav data sheet table in  the DOM
 let sheet = document.getElementById("sheet");
@@ -267,10 +313,14 @@ let navData = new navDataSheet();
 
 // Buttons
 const add = document.getElementById("add");
-const complete = document.getElementById("complete");
+const editTitle = document.getElementById("editTitle");
 const remove = document.getElementById("delete"); 
 const printSheet = document.getElementById("print");
 const applyChanges = document.getElementById("applyChanges");
+
+const warningBox = document.getElementById("warning");
+const tableTitle = document.getElementById('tableTitle');
+
 
 
 // Input textareas
@@ -290,7 +340,6 @@ function addColumn(placeholders) {
     
      
     let serial = serialSelector.value;
-    console.log(serial);
     let from = fromInput.value;
     let to = toInput.value;
     let going = goingInput.value; 
@@ -326,7 +375,7 @@ function addColumn(placeholders) {
         distanceCell.innerText = placeholders[3];
         timeCell.innerText = placeholders[4];
         goingCell.innerText = "Long, Hard and Gutwrenching";
-        remarksCell.innerText = "View is quite nice, if nothing else";
+        remarksCell.innerText = "View is quite nice, totally worth it";
         
         column.appendChild(serialCell);
         column.appendChild(gridFromCell);
@@ -482,16 +531,18 @@ function editColumn(serial, from, to, bearing, distance, time, going, remarks, c
             settings.eastWest,
             settings.gridZoneDesignator,
             settings.unitOfAngle,
-            settings.unitOfMeasure
+            settings.unitOfMeasure,
+            settings.timeFormat
         );
 
-        bearing.value = dataPoint.findBearingGrid();
+
+        bearing.value = dataPoint.findBearingMagnetic();
         bearing.cell.innerText = bearing.value;
 
-        distance.value = dataPoint.findDistance();
+        distance.value = dataPoint.distanceWithUnitsOfMeasure();
         distance.cell.innerText = distance.value;
 
-        time.value = dataPoint.findTime();
+        time.value = dataPoint.getFormattedTime();
         time.cell.innerText = time.value;
 
         going.cell.innerText = going.value;
@@ -602,12 +653,107 @@ function dropDownApplyChangesOptgroup(id) {
     }
 }
 
+function formatIsHM(time){
+    return time[time.length - 3] === ":";
+}
+
+function handleTimeFormatChange(index, data){
+    let row = sheet.children[index];
+    let time = row.children[5].innerText;
+    // Handle if no change
+    if(
+                (formatIsHM(time) && settings.timeFormat === "h:mm") 
+            ||  (!formatIsHM(time) && settings.timeFormat === ":mm") 
+            ||  (!formatIsHM(time) && settings.timeFormat === ":mm")
+        )
+    {
+        return;
+    }
+
+    // Handle if format is going from mm to h:mm
+    if( (!formatIsHM(time) && settings.timeFormat === "h:mm"))
+    {
+        time = data.convertMMtoHM(time);
+        row.children[5].innerText = time;
+        return;
+    }
+
+    // Handle if format is going from h:mm to mm
+    if(formatIsHM(time) && settings.timeFormat === ":mm"){
+        time = data.convertHMtoMM(time);
+        row.children[5].innerText = time;
+        return;
+    }
+}
+
+function updateUnitsAll(index){
+    let row = sheet.children[index];
+    let data = new navDataPoint(row.children[1].innerText.removeAllWhitespace(), row.children[2].innerText.removeAllWhitespace(), settings.timeOfDay, settings.terrain, settings.tactical, settings.gma, settings.eastWest, settings.gridZoneDesignator, settings.unitOfAngle, settings.unitOfMeasure, settings.timeFormat);
+    
+    row.children[3].innerText = data.findBearingMagnetic();
+    row.children[4].innerText = data.distanceWithUnitsOfMeasure();
+    
+    
+    handleTimeFormatChange(index, data);
+}
+
+
 // Executes once at start
 addColumn(placeholders);
 
 // Event listeners
 
 add.addEventListener('click', () => {
+    let from = fromInput.value.removeAllWhitespace();
+    let to = toInput.value.removeAllWhitespace();
+    let warningMessage = "";
+
+    // Validation
+    if(!isValidGrid(from) || !isValidGrid(to)){
+        if(!isValidGrid(from) && !isValidGrid(to)){
+            warningMessage += "Please Insert Valid Grids: "
+        }
+        if(!isValidGrid(from)){
+            if(from.length === 0){
+                warningMessage += 'The "From" value has to be given. ';
+            } else if(from.length < 4 ){
+                warningMessage += 'The "From" value has to be at least a 4 figure grid. ';
+            } else if(from.length > 10){
+                warningMessage += 'The "From" value cannot be more than a 10 figure grid. ';
+            } else if(from.length % 2 !== 0){
+                warningMessage += 'Ensure you typed in the correct grid, it has to be either a 4, 6, 8 or 10 figure grid. ';
+            }
+            let numRegex = /[^0-9]/g;
+            if(!from.match(numRegex) && from.length !== 0){
+                warningMessage += 'Only numbers and whitespace are valid entries. ';
+            }
+
+            fromInput.style.borderColor = "red";
+            warningBox.innerText = warningMessage;
+        }
+
+        if(!isValidGrid(to)){
+            if(to.length === 0){
+                warningMessage += 'The "To" value has to be given. ';
+            } else if(to.length < 4 ){
+                warningMessage += 'The "To" value has to be at least a 4 figure grid. ';
+            } else if(to.length > 10){
+                warningMessage += 'The "To" value cannot be more than a 10 figure grid. ';
+            } else if(to.length % 2 !== 0){
+                warningMessage += 'Ensure you typed in the correct grid, it has to be either a 4, 6, 8 or 10 figure grid. ';
+            }
+            let numRegex = /[^0-9]/g;
+            if(!to.match(numRegex) && to.length !== 0){
+                warningMessage += 'Only numbers and whitespace are valid entries. ';
+            }
+
+            toInput.style.borderColor = "red";
+            warningBox.innerText = warningMessage;
+        }
+        return;
+    }
+    warningBox.innerText = "";
+
     addColumn();
 })
 
@@ -626,6 +772,7 @@ applyChanges.addEventListener("click", () => {
     const unitsOfMeasure = document.getElementById("unitsOfMeasure");
     const eastWest = document.getElementById('eastWest');
     const gridMA = document.getElementById('gridMA');
+    const timeFormat = document.getElementById('timeFormat');
 
     settings.timeOfDay = timeOfDay.value;
     settings.terrain = terrain.value;
@@ -634,6 +781,7 @@ applyChanges.addEventListener("click", () => {
     settings.unitOfMeasure = unitsOfMeasure.value;
     eastWest.value === "east" ? settings.eastWest = "-1" : settings.eastWest = "1";
     settings.gma = gridMA.value;
+    settings.timeFormat = timeFormat.value;
 
 
     dropDownApplyChanges('timeOfDaySelector');
@@ -643,15 +791,21 @@ applyChanges.addEventListener("click", () => {
     dropDownApplyChangesOptgroup('unitsOfMeasure');
     dropDownApplyChanges('eastWest');
     gridMA.placeholder = gridMA.value;
+    dropDownApplyChanges('timeFormat');
 
-    const serHeader = document.getElementById("serialHeader");
-    const froHeader = document.getElementById("fromHeader");
-    const toHeader = document.getElementById("toHeader");
     const beaHeader = document.getElementById("bearingHeader");
     const disHeader = document.getElementById("distanceHeader");
     const timHeader = document.getElementById("timeHeader");
-    const goiHeader = document.getElementById("goingHeader");
-    const remHeader = document.getElementById("remarksHeader");
+
+    switch (settings.timeFormat) {
+        case ":mm":
+                timHeader.innerHTML = "Time<br>(:mm)";
+            break;
+        case "h:mm":
+                timHeader.innerHTML = "Time<br>(h:mm)";
+        default:
+            break;
+    }
 
     switch (settings.unitOfAngle) {
         case "degrees":
@@ -684,11 +838,72 @@ applyChanges.addEventListener("click", () => {
             break;
     }
 
+    for(let i = 0; i < sheet.children.length; i++){
+        updateUnitsAll(i);
+    }
+})
+
+editTitle.addEventListener('click', () => {
+
+        let oldTitle = document.getElementById('printTitle').innerText;
+        tableTitle.innerHTML = `<input type="text" title="docTitle" id="docTitle" style="width: 50%; text-align: center" value="${oldTitle}" />`;
+        let docTitle = document.getElementById('docTitle');
+        docTitle.focus();    
+        
+
+        docTitle.addEventListener('focusout', () => {
+            let newTitle = docTitle.value;
+            tableTitle.innerHTML = `<h4 id="printTitle">${newTitle}</h4>`
+        })
 
 })
 
-complete.addEventListener('click', () => {
+fromInput.addEventListener('focusout', () => {
+    let from = fromInput.value.removeAllWhitespace();
 
-    serials = sheet.children.length;
+    if(!isValidGrid(from) && from.length !== 0){
+        fromInput.style.borderColor = "red";
+        fromInput.style.boxShadow = "red";
+
+        return;
+    }
+
+    if(from.length === 0){
+        fromInput.style.borderColor = "rgba(144, 144, 144, 0.2)";
+        return;
+    }
+
+    fromInput.style.borderColor = "#4dbea0";
+})
+
+fromInput.addEventListener('keydown', () => {
+    let from = fromInput.value.removeAllWhitespace();
     
+    if(isValidGrid(from)){
+        fromInput.style.borderColor = "#4dbea0";
+    }
+})
+
+toInput.addEventListener('focusout', () => {
+    let to = toInput.value.removeAllWhitespace();
+
+    if(!isValidGrid(to) && to.length !== 0){
+        toInput.style.borderColor = "red";
+        return;
+    }
+
+    if(to.length === 0){
+        toInput.style.borderColor = "rgba(144, 144, 144, 0.2)";
+        return;
+    }
+
+    toInput.style.borderColor = "#4dbea0";
+})
+
+toInput.addEventListener('change', () => {
+    let to = toInput.value.removeAllWhitespace();
+    
+    if(isValidGrid(to)){
+        toInput.style.borderColor = "#4dbea0";
+    }
 })
