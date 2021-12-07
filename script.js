@@ -205,7 +205,17 @@ class navDataPoint {
 
     findBearingMagnetic(){
         let gridBearing = this.findBearingGrid();
-        return Math.abs((gridBearing + this.gma * this.eastWest) % this.units[this.unitOfAngle]);
+        let factor = this.gma * this.eastWest;
+        let unit = this.units[this.unitOfAngle];
+
+        if(factor < 0 && gridBearing + factor < 0){
+            return (gridBearing + factor + unit) % unit;
+        }
+        if(factor > 0 && gridBearing + factor > unit){
+            return (gridBearing + factor - unit) % unit;
+        }
+
+        return (gridBearing + this.gma * this.eastWest) % unit;
     }
 
 /**
