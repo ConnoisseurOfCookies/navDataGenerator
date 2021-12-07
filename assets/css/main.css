@@ -4196,6 +4196,17 @@ input, select, textarea {
 	list-style: none;
 }
 
+@media only screen and (max-width: 850px){
+	.addFeatureArea {
+		flex-direction: column;
+		height: auto;
+	}
+
+	#fromInput, #toInput, #add, #serialSelector {
+		margin-top: 10px;
+	}
+}
+
 .addFeatureArea li {
 	height: 100%;
 }
