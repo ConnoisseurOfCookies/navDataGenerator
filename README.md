@@ -5,39 +5,36 @@
 <h2>Navigation</h2>
 <ul>
     <li><a href="#howToUse">How to Use</a></li>
-    <li><a href="#knownIssues">Known issues</a></li>
-    <li><a href="#featuresToAdd">Features to Add</a></li>
-    <li><a href="#toDo">To do</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <!-- <li><a href="#knownIssues">Known issues</a></li> -->
+    <li><a href="#featuresToAdd">Missing featuers/To do</a></li>
 </ul>
 
 
 <h2 id="howToUse">How to Use</h2>
-    <li>Insert grids, 4, 6, 8 or 10 figure format </li>
-    <li>Press either ADD or COMPLETE/UPDATE to complete the column/sheet, note <a href="#knownIssues"><strike>Current issue with COMPLETE button</strike></a></li>
+<ul>
+    <li>Select the serial you want to add or edit<li>
+    <li>Insert grids <b>From</b> and <b>to</b> in a 4, 6, 8 or 10 figure format, whitespace is fine</li>
+    <li>Press <b>ADD/EDIT</b> button to insert/edit a column</li>
+    <li><b>Going</b> and <b>Remarks</b> are optional</li>
     <li>Remove bottom cell with REMOVE button</li>
+    <li>Change the title with the <b>EDIT TITLE</b> button. If you don't want a title leave it blank</li>
+    <li>Change units, terrain/time modifiers and grid-magnetic variation using the <b>Settings</b> tab. Press <b>Apply Settings</b> to update the sheet or current serial</li>
     <li>Download finished sheet as a Spreadsheet/JSON/TXT</li>
-    <li>Printing currently has limited device/browser compatibility, particularly when it comes to style and formatting, although I intend to make future versions with more complete toolsets</li>
-
-
-<h2 id="knownIssues">Known issues</h2>
-
-<h3>UI</h3>
-
-<ul>
-    <li><p><strike>Complete/update button sometimes deletes last element, probable issue with sheet indexing</strike></p> <b>Propably fixed</b></li>
+    <li>Printing currently has limited device/browser compatibility, particularly when it comes to style and formatting, although I may improve it later. You could try and update your printer drivers.</li>
 </ul>
 
-<h2 id="featuresToAdd">Features/to add</h2>
+<h2 id="faq">FAQ</h2>
+<ul>
+    <li>TBA</li>
+</ul>
+
+
+<h2 id="featuresToAdd">Missing Features/To Do</h2>
 
 <ul>
-    <li>Display units of measures in the grid, example: Bearing(deg)/Bearing(mils), Distance(m)/Distance(yards)</li>
     <li>PDF downloads, currently can only print --> print to PDF and not all systems preserve styles on print</li>
-    <li>Individual cell edits/updates/removes</li>
-    <li>Increased grid responsiveness/mobile compatibility</li>
+    <li>Port to Mobile via React-Native</li>
+    <li>Make a PWA version</li>
 </ul>
 
-<h2 id="toDo">To Do</h2>
-    <ul>
-        <li>Make it a PWA</li>
-        <li>Port to Mobile via React-Native</li>
-    </ul>
