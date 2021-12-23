@@ -771,6 +771,7 @@ remove.addEventListener('click', () => {
     if(sheet.children.length === 1) return;
     removeColumn();
     serials = sheet.children.length;
+    serialSelector.removeChild(serialSelector.children[serialSelector.children.length - 1])
 })
 
 
